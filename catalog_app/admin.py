@@ -3,51 +3,40 @@ from catalog_app.models import (
     Category,
     Good,
     GoodsImage,
-    TradeMark,
-    Gassing,
-    Filtering,
-    Pasteurization,
-    Manufacturer
+    Model,
+    Manufacturer,
+    Applicability
 )
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("__str__",)
+    list_display = ("__str__", 'id',)
 
 
-@admin.register(TradeMark)
-class TradeMarkAdmin(admin.ModelAdmin):
-    list_display = ("__str__",)
-
-
-@admin.register(Gassing)
-class GassingAdmin(admin.ModelAdmin):
-    list_display = ("__str__",)
-
-
-@admin.register(Filtering)
-class FilteringAdmin(admin.ModelAdmin):
-    list_display = ("__str__",)
-
-
-@admin.register(Pasteurization)
-class PasteurizationAdmin(admin.ModelAdmin):
-    list_display = ("__str__",)
+@admin.register(Model)
+class ModelAdmin(admin.ModelAdmin):
+    list_display = ("__str__", 'id',)
 
 
 @admin.register(Manufacturer)
 class ManufacturerAdmin(admin.ModelAdmin):
-    list_display = ("__str__",)
+    list_display = ("__str__", 'id',)
 
 
 class GoodsImageInLine(admin.TabularInline):
     model = GoodsImage
+    fields = ('image',)
+
+
+class ApplicabilityInLine(admin.TabularInline):
+    model = Applicability
+    fields = ('model',)
 
 
 @admin.register(Good)
 class GoodAdmin(admin.ModelAdmin):
-    inlines = [GoodsImageInLine]
+    inlines = [GoodsImageInLine, ApplicabilityInLine]
     list_display = (
         "name", "art", "category",
         "is_active", "balance", "price",

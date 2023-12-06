@@ -8,22 +8,22 @@ def category_by_id(id: str) -> Category:
     return Category.objects.filter(id=id).first()
 
 
-def handle_category(category_dir: dir) -> Category:
-    category_id = category_dir.get('id', "")
-    category_name = category_dir.get('name', "")
-    category = category_by_id(category_id)
-    if category is None:
-        category = Category.objects.create(
-            id=category_id,
-            name=category_name
+def handle_category(item_dir: dir) -> Category:
+    item_id = item_dir.get('id', "")
+    item = category_by_id(id=item_id)
+    if item is None:
+        item = Category.objects.create(
+            id=item_id
         )
-    return category
+    item.name = item_dir.get('name', item.name)
+    item.save()
+    return item
 
 
-def handle_category_list(category_list: None) -> [Category]:
-    categories_id = []
+def handle_category_list(item_list: [dir]) -> [Category]:
+    items_id = []
     with transaction.atomic():
-        for category_item in category_list:
-            category = handle_category(category_dir=category_item)
-            categories_id.append(category.id)
-    return Category.objects.filter(id__in=categories_id)
+        for item_dir in item_list:
+            item = handle_category(item_dir=item_dir)
+            items_id.append(item.id)
+    return Category.objects.filter(id__in=items_id)

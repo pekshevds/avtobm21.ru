@@ -1,16 +1,13 @@
+import uuid
 from django.db import models
 from django.utils import timezone
 from django.utils.dateformat import format
 from server.base import Directory
 from server.base import Document
 from catalog_app.models import Good
+from client_app.models import Client
+from auth_app.models import User
 from order_app.services import ganerate_new_number
-
-
-class Client(Directory):
-    class Meta:
-        verbose_name = "Клиент"
-        verbose_name_plural = "Клиенты"
 
 
 class Customer(Directory):
@@ -81,30 +78,52 @@ class Contract(Directory):
 
 
 class Order(Document):
+    author = models.ForeignKey(
+        User,
+        verbose_name="Автор",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT
+    )
     contract = models.ForeignKey(
         Contract,
         verbose_name="Договор",
+        null=True,
+        blank=True,
         on_delete=models.PROTECT
     )
     client = models.ForeignKey(
         Client,
         verbose_name="Клиент",
+        null=True,
+        blank=True,
         on_delete=models.PROTECT
     )
     customer = models.ForeignKey(
         Customer,
         verbose_name="Покупатель",
+        null=True,
+        blank=True,
         on_delete=models.PROTECT
     )
     organization = models.ForeignKey(
         Organization,
         verbose_name="Организация",
+        null=True,
+        blank=True,
         on_delete=models.PROTECT
     )
 
     def save(self, *args, **kwargs) -> None:
         if not self.number:
             self.number = ganerate_new_number(model=Order)
+        if self.contract:
+            if not self.client:
+                self.client = self.contract.client
+            if not self.customer:
+                self.customer = self.contract.customer
+            if not self.organization:
+                self.organization = self.contract.organization
         return super().save(*args, **kwargs)
 
     def __str__(self) -> str:
@@ -117,14 +136,23 @@ class Order(Document):
 
 
 class ItemOrder(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
+        null=True,
+        blank=True,
         related_name="items"
     )
     good = models.ForeignKey(
         Good,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
     )
     quantity = models.DecimalField(
         verbose_name="Количество",

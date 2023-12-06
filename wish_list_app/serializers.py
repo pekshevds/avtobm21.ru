@@ -6,3 +6,7 @@ from catalog_app.serializers import GoodSerializer
 class WishListSerializer(serializers.Serializer):
     # user = UserSerializer()
     good = GoodSerializer()
+
+
+class SimpleWishListSerializer(serializers.Serializer):
+    good_id = serializers.UUIDField()

@@ -4,28 +4,26 @@ from catalog_app.models import (
 )
 
 
-def manufacturer_by_id(manufacturer_id: str) -> Manufacturer:
-    return Manufacturer.objects.filter(id=manufacturer_id).first()
+def manufacturer_by_id(id: str) -> Manufacturer:
+    return Manufacturer.objects.filter(id=id).first()
 
 
-def handle_manufacturer(manufacturer_dir: dir) -> Manufacturer:
-    manufacturer_id = manufacturer_dir.get('id', "")
-    manufacturer_name = manufacturer_dir.get('name', "")
-    manufacturer = manufacturer_by_id(manufacturer_id)
-    if manufacturer is None:
-        manufacturer = Manufacturer.objects.create(
-            id=manufacturer_id,
-            name=manufacturer_name
+def handle_manufacturer(item_dir: dir) -> Manufacturer:
+    item_id = item_dir.get('id', "")
+    item = manufacturer_by_id(id=item_id)
+    if item is None:
+        item = Manufacturer.objects.create(
+            id=item_id
         )
-    return manufacturer
+    item.name = item_dir.get('name', item.name)
+    item.save()
+    return item
 
 
-def handle_manufacturer_list(manufacturer_list: None) -> [Manufacturer]:
-    manufacturer_id = []
+def handle_manufacturer_list(item_list: [dir]) -> [Manufacturer]:
+    items_id = []
     with transaction.atomic():
-        for manufacturer_item in manufacturer_list:
-            manufacturer = handle_manufacturer(
-                manufacturer_dir=manufacturer_item
-            )
-            manufacturer_id.append(manufacturer.id)
-    return Manufacturer.objects.filter(id__in=manufacturer_id)
+        for item_dir in item_list:
+            item = handle_manufacturer(item_dir=item_dir)
+            items_id.append(item.id)
+    return Manufacturer.objects.filter(id__in=items_id)

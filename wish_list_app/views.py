@@ -29,7 +29,7 @@ class WishListAddView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        good = get_object_or_404(Good, id=request.GET.get("id", 0))
+        good = get_object_or_404(Good, id=request.GET.get("good_id", None))
         add_to_wish_list(user=request.user, good=good)
 
         queryset = fetch_users_wish_list(request.user)
@@ -43,7 +43,7 @@ class WishListDeleteView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        good = get_object_or_404(Good, id=request.GET.get("id", 0))
+        good = get_object_or_404(Good, id=request.GET.get("good_id", None))
         delete_from_wish_list(user=request.user, good=good)
 
         queryset = fetch_users_wish_list(request.user)

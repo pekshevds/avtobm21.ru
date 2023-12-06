@@ -5,21 +5,15 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from catalog_app.models import (
     Manufacturer,
-    Filtering,
-    Pasteurization,
-    Gassing,
-    TradeMark,
+    Model,
     Category,
     Good
 )
 from catalog_app.serializers import (
     ManufacturerSerializer,
-    FilteringSerializer,
-    PasteurizationSerializer,
-    GassingSerializer,
-    TradeMarkSerializer,
-    CategorySerializer,
-    GoodSerializer
+    ModelSerializer,
+    GoodSerializer,
+    CategorySerializer
 )
 from catalog_app.services.good import handle_good_list
 
@@ -41,58 +35,7 @@ class ManufacturerView(APIView):
         return Response(response)
 
 
-class FilteringView(APIView):
-
-    authentication_classes = [authentication.BasicAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request):
-        id = request.GET.get("id")
-        if id:
-            queryset = Filtering.objects.filter(id=id)
-            serializer = FilteringSerializer(queryset, many=True)
-        else:
-            queryset = Filtering.objects.all()
-            serializer = FilteringSerializer(queryset, many=True)
-        response = {"data": serializer.data}
-        return Response(response)
-
-
-class PasteurizationView(APIView):
-
-    authentication_classes = [authentication.BasicAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request):
-        id = request.GET.get("id")
-        if id:
-            queryset = Pasteurization.objects.filter(id=id)
-            serializer = PasteurizationSerializer(queryset, many=True)
-        else:
-            queryset = Pasteurization.objects.all()
-            serializer = PasteurizationSerializer(queryset, many=True)
-        response = {"data": serializer.data}
-        return Response(response)
-
-
-class GassingView(APIView):
-
-    authentication_classes = [authentication.BasicAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request):
-        id = request.GET.get("id")
-        if id:
-            queryset = Gassing.objects.filter(id=id)
-            serializer = GassingSerializer(queryset, many=True)
-        else:
-            queryset = Gassing.objects.all()
-            serializer = GassingSerializer(queryset, many=True)
-        response = {"data": serializer.data}
-        return Response(response)
-
-
-class TradeMarkView(APIView):
+class ModelView(APIView):
 
     authentication_classes = [authentication.BasicAuthentication]
     permission_classes = [permissions.IsAuthenticated]
@@ -100,11 +43,11 @@ class TradeMarkView(APIView):
     def get(self, request):
         id = request.GET.get("id", 0)
         if id:
-            queryset = TradeMark.objects.filter(id=id)
-            serializer = TradeMarkSerializer(queryset, many=True)
+            queryset = Model.objects.filter(id=id)
+            serializer = ModelSerializer(queryset, many=True)
         else:
-            queryset = TradeMark.objects.all()
-            serializer = TradeMarkSerializer(queryset, many=True)
+            queryset = Model.objects.all()
+            serializer = ModelSerializer(queryset, many=True)
         response = {"data": serializer.data}
         return Response(response)
 

@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.hashers import make_password
-from order_app.models import Client
+from client_app.models import Client
 
 from auth_app.commons import (
     default_date_plus_five_min,
