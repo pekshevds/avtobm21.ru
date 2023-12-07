@@ -34,7 +34,7 @@ class SimpleGoodSerializer(serializers.Serializer):
     id = serializers.UUIDField()
     name = serializers.CharField(max_length=150)
     art = serializers.CharField(
-        max_length=25, required=False, allow_blank=True)
+        max_length=50, required=False, allow_blank=True)
     balance = serializers.DecimalField(
         max_digits=15, decimal_places=3, required=False)
     price = serializers.DecimalField(

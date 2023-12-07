@@ -30,7 +30,7 @@ class Manufacturer(Directory):
 class Good(Directory):
     art = models.CharField(
         verbose_name="Артикул",
-        max_length=25,
+        max_length=50,
         blank=True,
         null=True,
         default="",
