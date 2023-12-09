@@ -5,7 +5,7 @@ from client_app.serializers import ClientSerializer
 
 
 class ClientView(APIView):
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):

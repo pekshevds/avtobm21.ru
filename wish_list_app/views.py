@@ -14,7 +14,7 @@ from wish_list_app.services import (
 
 
 class WishListView(APIView):
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
@@ -25,7 +25,7 @@ class WishListView(APIView):
 
 
 class WishListAddView(APIView):
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
@@ -39,7 +39,7 @@ class WishListAddView(APIView):
 
 
 class WishListDeleteView(APIView):
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
@@ -53,7 +53,7 @@ class WishListDeleteView(APIView):
 
 
 class WishListClearView(APIView):
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):

@@ -18,7 +18,7 @@ from order_app.services.order import handle_order_list
 
 
 class ContractView(APIView):
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
@@ -30,7 +30,7 @@ class ContractView(APIView):
 
 
 class OrderView(APIView):
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
@@ -58,7 +58,7 @@ class OrderView(APIView):
 
 
 class OrderDeleteView(APIView):
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
@@ -72,7 +72,7 @@ class OrderDeleteView(APIView):
 
 
 class OrderItemView(APIView):
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
@@ -94,7 +94,7 @@ class OrderItemView(APIView):
 
 
 class OrderItemDeleteView(APIView):
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):

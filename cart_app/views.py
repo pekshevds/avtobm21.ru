@@ -14,7 +14,7 @@ from cart_app.services import (
 
 
 class CartView(APIView):
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
@@ -25,7 +25,7 @@ class CartView(APIView):
 
 
 class CartAddView(APIView):
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
@@ -55,7 +55,7 @@ class CartAddView(APIView):
 
 
 class CartDeleteView(APIView):
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
@@ -85,7 +85,7 @@ class CartDeleteView(APIView):
 
 
 class CartClearView(APIView):
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
