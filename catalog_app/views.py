@@ -1,6 +1,9 @@
 from django.core.paginator import Paginator
 from django.db.models import Q
-from rest_framework import permissions, authentication
+from rest_framework import (
+    permissions,
+    authentication
+)
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from catalog_app.models import (
@@ -20,8 +23,7 @@ from catalog_app.services.good import handle_good_list
 
 class ManufacturerView(APIView):
 
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get(self, request):
         id = request.GET.get("id")
@@ -37,8 +39,7 @@ class ManufacturerView(APIView):
 
 class ModelView(APIView):
 
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get(self, request):
         id = request.GET.get("id", 0)
@@ -54,8 +55,7 @@ class ModelView(APIView):
 
 class CategoryView(APIView):
 
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get(self, request):
         id = request.GET.get("id", 0)
@@ -71,8 +71,8 @@ class CategoryView(APIView):
 
 class GoodView(APIView):
 
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.BasicAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request):
         id = request.GET.get("id", 0)
