@@ -94,7 +94,10 @@ class GoodView(APIView):
             serializer = GoodSerializer(
                 paginator.get_page(page_number), many=True
             )
-        response = {"data": serializer.data}
+        response = {
+            "data": serializer.data,
+            "count": len(queryset)
+            }
         return Response(response)
 
     def post(self, request):
