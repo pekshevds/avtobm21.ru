@@ -28,8 +28,8 @@ SECRET_KEY = config.SECRET_KEY
 DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1',
-                 'avtobm21.annasoft.site',
-                 'www.avtobm21.annasoft.site',]
+                 'back.avtobm21.ru',
+                 'www.back.avtobm21.ru',]
 
 
 # Application definition
@@ -184,10 +184,10 @@ AUTH_USER_DEFAULT_PASSWORD = "QWEqwe123"
 
 
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3030',
-]
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    'http://localhost:3030',
-]
+# CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:3030',
+# ]
+# CORS_ALLOWED_ORIGIN_REGEXES = [
+#     'http://localhost:3030',
+# ]
