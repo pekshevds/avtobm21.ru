@@ -105,5 +105,5 @@ def fetch_goods_queryset_by_category(category: Category):
 
 
 def fetch_goods_queryset_by_manufacturer(manufacturer: Manufacturer):
-    queryset = Manufacturer.objects.filter(manufacturer=manufacturer)
+    queryset = Good.objects.filter(manufacturer=manufacturer)
     return queryset
