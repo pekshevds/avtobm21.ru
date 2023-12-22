@@ -99,11 +99,11 @@ def fetch_goods_queryset_by_name_or_article(search: str):
     return queryset
 
 
-def fetch_goods_queryset_by_category(category: Category):
-    queryset = Good.objects.filter(category=category)
+def fetch_goods_queryset_by_category(categories: [Category]):
+    queryset = Good.objects.filter(category__in=categories)
     return queryset
 
 
-def fetch_goods_queryset_by_manufacturer(manufacturer: Manufacturer):
-    queryset = Good.objects.filter(manufacturer=manufacturer)
+def fetch_goods_queryset_by_manufacturer(manufacturers: [Manufacturer]):
+    queryset = Good.objects.filter(manufacturer__in=manufacturers)
     return queryset

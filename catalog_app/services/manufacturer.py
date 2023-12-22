@@ -8,6 +8,10 @@ def manufacturer_by_id(id: str) -> Manufacturer:
     return Manufacturer.objects.filter(id=id).first()
 
 
+def manufacturer_by_id_list(id: [str]):
+    return list(Manufacturer.objects.filter(id__in=id))
+
+
 def handle_manufacturer(item_dir: dir) -> Manufacturer:
     item_id = item_dir.get('id', "")
     item = manufacturer_by_id(id=item_id)

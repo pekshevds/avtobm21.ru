@@ -25,6 +25,9 @@ from catalog_app.services.good import (
     fetch_goods_queryset_by_manufacturer
 )
 
+from catalog_app.services.category import category_by_id_list
+from catalog_app.services.manufacturer import manufacturer_by_id_list
+
 
 class ManufacturerView(APIView):
 
@@ -92,18 +95,20 @@ class GoodView(APIView):
             search = request.GET.get("search")
             if search:
                 queryset = fetch_goods_queryset_by_name_or_article(search)
+            else:
+                category_id = request.GET.get("category_id")
+                if category_id:
+                    categories = category_by_id_list(category_id.split(","))
+                    queryset = fetch_goods_queryset_by_category(categories)
 
-            category_id = request.GET.get("category_id")
-            if category_id:
-                category = get_object_or_404(Category, pk=category_id)
-                queryset = fetch_goods_queryset_by_category(category)
-
-            manufacturer_id = request.GET.get("manufacturer_id")
-            if manufacturer_id:
-                manufacturer = get_object_or_404(
-                    Manufacturer, pk=manufacturer_id
-                )
-                queryset = fetch_goods_queryset_by_manufacturer(manufacturer)
+                manufacturer_id = request.GET.get("manufacturer_id")
+                if manufacturer_id:
+                    manufacturers = manufacturer_by_id_list(
+                        manufacturer_id.split(",")
+                    )
+                    queryset = fetch_goods_queryset_by_manufacturer(
+                        manufacturers
+                    )
 
             if queryset is None:
                 queryset = Good.objects.all()
