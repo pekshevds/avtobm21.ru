@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from rest_framework import (
     permissions,
     authentication
@@ -18,7 +18,11 @@ from catalog_app.serializers import (
     GoodSerializer,
     CategorySerializer
 )
-from catalog_app.services.good import handle_good_list
+from catalog_app.services.good import (
+    handle_good_list,
+    fetch_goods_queryset_by_name_or_article,
+    fetch_goods_queryset_by_category
+)
 
 
 class ManufacturerView(APIView):
@@ -82,14 +86,20 @@ class GoodView(APIView):
         else:
             page_number = request.GET.get("page", 1)
             count = request.GET.get("count", 25)
-            filter = request.GET.get("filter")
-            if filter:
-                queryset = Good.objects.filter(
-                    Q(name__icontains=filter) |
-                    Q(art__icontains=filter)
-                    )
-            else:
+            queryset = None
+
+            search = request.GET.get("search")
+            if search:
+                queryset = fetch_goods_queryset_by_name_or_article(search)
+
+            category_id = request.GET.get("category_id")
+            if category_id:
+                category = get_object_or_404(Category, pk=category_id)
+                queryset = fetch_goods_queryset_by_category(category)
+
+            if queryset is None:
                 queryset = Good.objects.all()
+
             paginator = Paginator(queryset, count)
             serializer = GoodSerializer(
                 paginator.get_page(page_number), many=True

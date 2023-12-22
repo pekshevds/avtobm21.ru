@@ -1,8 +1,10 @@
+from django.db.models import Q
 from django.db import transaction
 from catalog_app.models import (
     Good,
     Model,
-    Applicability
+    Applicability,
+    Category
 )
 from catalog_app.services.category import handle_category
 from catalog_app.services.manufacturer import handle_manufacturer
@@ -86,3 +88,16 @@ def handle_good_list(good_list: None) -> [Good]:
             goods_id.append(good.id)
 
     return Good.objects.filter(id__in=goods_id)
+
+
+def fetch_goods_queryset_by_name_or_article(search: str):
+    queryset = Good.objects.filter(
+        Q(name__icontains=search) |
+        Q(art__icontains=search)
+        )
+    return queryset
+
+
+def fetch_goods_queryset_by_category(category: Category):
+    queryset = Good.objects.filter(category=category)
+    return queryset
