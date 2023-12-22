@@ -25,7 +25,7 @@ class GoodSerializer(serializers.Serializer):
         max_digits=15, decimal_places=3, required=False)
     price = serializers.DecimalField(
         max_digits=15, decimal_places=2, required=False)
-    code_okdp2 = CategorySerializer(required=False, allow_null=True)
+    category = CategorySerializer(required=False, allow_null=True)
     model = ModelSerializer(required=False, allow_null=True)
     manufacturer = ManufacturerSerializer(required=False, allow_null=True)
 
@@ -40,4 +40,5 @@ class SimpleGoodSerializer(serializers.Serializer):
     price = serializers.DecimalField(
         max_digits=15, decimal_places=2, required=False)
     category_id = serializers.UUIDField(required=False, allow_null=True)
+    model_id = serializers.UUIDField(required=False, allow_null=True)
     manufacturer_id = serializers.UUIDField(required=False, allow_null=True)

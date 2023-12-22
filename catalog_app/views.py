@@ -21,7 +21,8 @@ from catalog_app.serializers import (
 from catalog_app.services.good import (
     handle_good_list,
     fetch_goods_queryset_by_name_or_article,
-    fetch_goods_queryset_by_category
+    fetch_goods_queryset_by_category,
+    fetch_goods_queryset_by_manufacturer
 )
 
 
@@ -96,6 +97,13 @@ class GoodView(APIView):
             if category_id:
                 category = get_object_or_404(Category, pk=category_id)
                 queryset = fetch_goods_queryset_by_category(category)
+
+            manufacturer_id = request.GET.get("manufacturer_id")
+            if manufacturer_id:
+                manufacturer = get_object_or_404(
+                    Manufacturer, pk=manufacturer_id
+                )
+                queryset = fetch_goods_queryset_by_manufacturer(manufacturer)
 
             if queryset is None:
                 queryset = Good.objects.all()

@@ -4,7 +4,8 @@ from catalog_app.models import (
     Good,
     Model,
     Applicability,
-    Category
+    Category,
+    Manufacturer
 )
 from catalog_app.services.category import handle_category
 from catalog_app.services.manufacturer import handle_manufacturer
@@ -100,4 +101,9 @@ def fetch_goods_queryset_by_name_or_article(search: str):
 
 def fetch_goods_queryset_by_category(category: Category):
     queryset = Good.objects.filter(category=category)
+    return queryset
+
+
+def fetch_goods_queryset_by_manufacturer(manufacturer: Manufacturer):
+    queryset = Manufacturer.objects.filter(manufacturer=manufacturer)
     return queryset
