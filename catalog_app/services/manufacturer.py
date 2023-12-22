@@ -8,7 +8,7 @@ def manufacturer_by_id(id: str) -> Manufacturer:
     return Manufacturer.objects.filter(id=id).first()
 
 
-def manufacturer_by_id_list(id: [str]):
+def manufacturer_by_id_list(id: [str]) -> [Manufacturer]:
     return list(Manufacturer.objects.filter(id__in=id))
 
 

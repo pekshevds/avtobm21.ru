@@ -107,3 +107,18 @@ def fetch_goods_queryset_by_category(categories: [Category]):
 def fetch_goods_queryset_by_manufacturer(manufacturers: [Manufacturer]):
     queryset = Good.objects.filter(manufacturer__in=manufacturers)
     return queryset
+
+
+def fetch_goods_queryset_by_filters(
+        categories: [Category],
+        manufacturers: [Manufacturer]
+        ):
+    filters = Q()
+    if categories:
+        filters.add(Q(category__in=categories), Q.AND)
+
+    if manufacturers:
+        filters.add(Q(manufacturers__in=manufacturers), Q.AND)
+
+    queryset = Good.objects.filter(filters)
+    return queryset

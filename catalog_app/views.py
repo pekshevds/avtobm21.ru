@@ -1,5 +1,4 @@
 from django.core.paginator import Paginator
-from django.shortcuts import get_object_or_404
 from rest_framework import (
     permissions,
     authentication
@@ -24,9 +23,9 @@ from catalog_app.services.good import (
     fetch_goods_queryset_by_category,
     fetch_goods_queryset_by_manufacturer
 )
-
 from catalog_app.services.category import category_by_id_list
 from catalog_app.services.manufacturer import manufacturer_by_id_list
+from catalog_app.services.good import fetch_goods_queryset_by_filters
 
 
 class ManufacturerView(APIView):
@@ -96,19 +95,22 @@ class GoodView(APIView):
             if search:
                 queryset = fetch_goods_queryset_by_name_or_article(search)
             else:
+
+                categories = None
                 category_id = request.GET.get("category_id")
                 if category_id:
                     categories = category_by_id_list(category_id.split(","))
-                    queryset = fetch_goods_queryset_by_category(categories)
 
+                manufacturers = None
                 manufacturer_id = request.GET.get("manufacturer_id")
                 if manufacturer_id:
                     manufacturers = manufacturer_by_id_list(
                         manufacturer_id.split(",")
                     )
-                    queryset = fetch_goods_queryset_by_manufacturer(
-                        manufacturers
-                    )
+                queryset = fetch_goods_queryset_by_filters(
+                    categories,
+                    manufacturers
+                )
 
             if queryset is None:
                 queryset = Good.objects.all()
