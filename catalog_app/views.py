@@ -19,9 +19,7 @@ from catalog_app.serializers import (
 )
 from catalog_app.services.good import (
     handle_good_list,
-    fetch_goods_queryset_by_name_or_article,
-    fetch_goods_queryset_by_category,
-    fetch_goods_queryset_by_manufacturer
+    fetch_goods_queryset_by_name_or_article
 )
 from catalog_app.services.category import category_by_id_list
 from catalog_app.services.manufacturer import manufacturer_by_id_list
