@@ -111,7 +111,7 @@ class GoodsImage(Base):
     )
 
     def __str__(self) -> str:
-        return self.image.url
+        return self.image.name
 
     class Meta:
         verbose_name = "Изображение"

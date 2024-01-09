@@ -1,15 +1,16 @@
 from django.db import models
-from server.base import Base
+from server.base import Directory
 
 
-class Image(Base):
-    url = models.CharField(
-        max_length=255,
-        verbose_name="Путь к изображению"
+class Image(Directory):
+    image = models.ImageField(
+        verbose_name="Изображение",
+        upload_to='images/',
+        blank=True
     )
 
     def __str__(self) -> str:
-        return f"{self.url}"
+        return f"{self.name}"
 
     class Meta:
         verbose_name = "Изображение"
