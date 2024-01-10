@@ -31,8 +31,9 @@ class GoodsImageInLine(admin.TabularInline):
     readonly_fields = ("preview",)
 
     def preview(self, obj):
-        str = f"<img src={obj.image.image.url} style='max-height: 75px;'>"
-        return format_html(str)
+        if obj.image:
+            str = f"<img src={obj.image.image.url} style='max-height: 75px;'>"
+            return format_html(str)
 
 
 class ApplicabilityInLine(admin.TabularInline):
@@ -50,7 +51,8 @@ class GoodAdmin(admin.ModelAdmin):
     search_fields = ("name", "art",)
 
     def preview(self, obj):
-        str = f"<img src={obj.image.image.url} style='max-height: 75px;'>"
-        return format_html(str)
+        if obj.imaje:
+            str = f"<img src={obj.image.image.url} style='max-height: 75px;'>"
+            return format_html(str)
 
     preview.short_description = "Изображение (превью)"

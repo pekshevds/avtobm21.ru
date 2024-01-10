@@ -6,7 +6,9 @@ class Image(Directory):
     image = models.ImageField(
         verbose_name="Файл изображения",
         upload_to='images/',
-        blank=True
+        blank=True,
+        null=True,
+        default=""
     )
 
     def __str__(self) -> str:
