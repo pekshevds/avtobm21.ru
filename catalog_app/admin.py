@@ -27,7 +27,12 @@ class ManufacturerAdmin(admin.ModelAdmin):
 
 class GoodsImageInLine(admin.TabularInline):
     model = GoodsImage
-    fields = ('image',)
+    fields = ('image', "preview",)
+    readonly_fields = ("preview",)
+
+    def preview(self, obj):
+        str = f"<img src={obj.image.image.url} style='max-height: 75px;'>"
+        return format_html(str)
 
 
 class ApplicabilityInLine(admin.TabularInline):
@@ -47,3 +52,5 @@ class GoodAdmin(admin.ModelAdmin):
     def preview(self, obj):
         str = f"<img src={obj.image.image.url} style='max-height: 75px;'>"
         return format_html(str)
+
+    preview.short_description = "Изображение (превью)"

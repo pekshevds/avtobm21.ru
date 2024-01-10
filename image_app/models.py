@@ -4,7 +4,7 @@ from server.base import Directory
 
 class Image(Directory):
     image = models.ImageField(
-        verbose_name="Изображение",
+        verbose_name="Файл изображения",
         upload_to='images/',
         blank=True
     )
