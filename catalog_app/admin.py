@@ -9,6 +9,10 @@ from catalog_app.models import (
     Applicability
 )
 
+admin.site.site_header = "Панель администрирования avtobm21.ru"
+admin.site.site_title = "Панель администрирования avtobm21.ru"
+admin.site.index_title = "Добро пожаловать!"
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
