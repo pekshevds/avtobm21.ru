@@ -85,6 +85,10 @@ class Good(Directory):
         null=True
     )
 
+    """@property
+    def images(self):
+        return GoodsImage.objects.filter(good=self)"""
+
     def save(self, *args, **kwargs) -> None:
         if not self.slug:
             self.slug = slugify(

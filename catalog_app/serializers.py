@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from image_app.serializers import ImageSerializer
 
 
 class CategorySerializer(serializers.Serializer):
@@ -16,6 +17,10 @@ class ManufacturerSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=150)
 
 
+class GoodsImageSerializer(serializers.Serializer):
+    image = ImageSerializer(required=False, allow_null=True)
+
+
 class GoodSerializer(serializers.Serializer):
     id = serializers.UUIDField()
     name = serializers.CharField(max_length=150)
@@ -27,6 +32,10 @@ class GoodSerializer(serializers.Serializer):
         max_digits=15, decimal_places=2, required=False)
     category = CategorySerializer(required=False, allow_null=True)
     manufacturer = ManufacturerSerializer(required=False, allow_null=True)
+    preview = ImageSerializer(required=False, allow_null=True,
+                              source="image", read_only=True)
+    images = GoodsImageSerializer(required=False, allow_null=True,
+                                  many=True, read_only=True)
 
 
 class SimpleGoodSerializer(serializers.Serializer):
@@ -40,3 +49,7 @@ class SimpleGoodSerializer(serializers.Serializer):
         max_digits=15, decimal_places=2, required=False)
     category_id = serializers.UUIDField(required=False, allow_null=True)
     manufacturer_id = serializers.UUIDField(required=False, allow_null=True)
+    preview = ImageSerializer(required=False, allow_null=True,
+                              source="image", read_only=True)
+    images = GoodsImageSerializer(required=False, allow_null=True,
+                                  many=True, read_only=True)
