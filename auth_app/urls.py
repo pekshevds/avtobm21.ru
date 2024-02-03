@@ -1,9 +1,9 @@
 from django.urls import path
-from auth_app.views import UserView, SendMessageView
+from auth_app.views import UserView, SendPinView
 
 app_name = 'auth_app'
 
 urlpatterns = [
     path('', UserView.as_view(), name="user"),
-    path('send-message/', SendMessageView.as_view(), name="send-message"),
+    path('send-pin/', SendPinView.as_view(), name="send-pin-code"),
 ]
