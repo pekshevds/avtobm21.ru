@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from auth_app.models import User
 from auth_app.serializers import UserSerializer
+from auth_app.transport import send_message
 
 
 class UserView(APIView):
@@ -19,3 +20,13 @@ class UserView(APIView):
             serializer = UserSerializer(queryset, many=True)
         response = {"data": serializer.data}
         return Response(response)
+
+
+class SendMessageView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        recipient = request.GET.get('recipient', "")
+        if recipient:
+            send_message(recipient)
+        return Response({"data": None})

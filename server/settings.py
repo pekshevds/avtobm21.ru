@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+from enum import Enum
 from pathlib import Path
 # import os
 import config
@@ -191,3 +191,20 @@ CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOWED_ORIGIN_REGEXES = [
 #     'http://localhost:3030',
 # ]
+
+# SEND EMAIL SETTINGS
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = config.EMAIL_HOST
+EMAIL_PORT = config.EMAIL_PORT
+EMAIL_HOST_USER = config.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = config.EMAIL_HOST_PASSWORD
+EMAIL_USE_TLS = config.EMAIL_USE_TLS
+EMAIL_USE_SSL = config.EMAIL_USE_SSL
+
+
+class SEND_MESSAGE_TYPE_CHOICES(Enum):
+    SMS = "SMS"
+    EMAIL = "EMAIL"
+
+
+SEND_MESSAGE_TYPE = SEND_MESSAGE_TYPE_CHOICES.EMAIL
