@@ -24,9 +24,9 @@ class UserView(APIView):
 
 
 class SendPinView(APIView):
-    # permission_classes = [permissions.AllowAny]
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
+    # authentication_classes = [authentication.TokenAuthentication]
+    # permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
         recipient = request.GET.get("recipient", None)
