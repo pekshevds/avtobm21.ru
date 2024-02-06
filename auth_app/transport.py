@@ -2,8 +2,7 @@
 from django.core.mail import send_mail as send_mail_from_django
 from django.conf import settings
 from auth_app.services import (
-    user_by_username,
-    user_by_email
+    fetch_find_user_function
 )
 
 
@@ -26,17 +25,9 @@ def transport_function():
     return choices.get(settings.SEND_MESSAGE_TYPE, None)
 
 
-def check_recipient_function():
-    choices = {
-        settings.SEND_MESSAGE_TYPE_CHOICES.SMS: user_by_username,
-        settings.SEND_MESSAGE_TYPE_CHOICES.EMAIL: user_by_email,
-    }
-    return choices.get(settings.SEND_MESSAGE_TYPE, None)
-
-
 def fetch_recipient(recipient: str):
-    check_recipient = check_recipient_function()
-    return check_recipient(recipient)
+    find_user = fetch_find_user_function()
+    return find_user(recipient)
 
 
 def recipient_exist(recipient: str):

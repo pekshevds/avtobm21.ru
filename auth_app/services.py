@@ -1,7 +1,27 @@
+from django.conf import settings
 from django.utils import timezone
 from django.db.models.query import QuerySet
 from auth_app.models import Pin
 from auth_app.models import User
+
+
+def fetch_find_user_function():
+    choices = {
+        settings.SEND_MESSAGE_TYPE_CHOICES.SMS: user_by_username,
+        settings.SEND_MESSAGE_TYPE_CHOICES.EMAIL: user_by_email,
+    }
+    return choices.get(settings.SEND_MESSAGE_TYPE, None)
+
+
+def authenticate(username: str, pincode: str) -> User | None:
+    find_user = fetch_find_user_function()
+    user = find_user(username)
+    if user is not None:
+        available_pins = not_used_users_pins(user)
+        pincodes = [pin.pin_code for pin in available_pins]
+        if pincode in pincodes:
+            return user
+    return None
 
 
 def user_by_username(username: str):
@@ -23,7 +43,7 @@ def not_used_users_pins(user: User) -> [Pin]:
 
 def users_pin_by_pin_code(
         pins: QuerySet,
-        pin_code: str) -> [Pin, None]:
+        pin_code: str) -> Pin | None:
     """Ищет пин пользователя по пин-коду"""
 
     for pin in pins:
