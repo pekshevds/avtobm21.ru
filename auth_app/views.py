@@ -1,11 +1,15 @@
 from rest_framework import permissions, authentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
 from auth_app.models import User
 from auth_app.serializers import UserSerializer
 from auth_app.transport import send_pin_code, fetch_recipient
-from auth_app.services import add_pin, authenticate
+from auth_app.services import (
+    add_pin,
+    authenticate,
+    update_or_create_user_token,
+    use_pin_code
+)
 
 
 class UserView(APIView):
@@ -51,12 +55,13 @@ class TokenView(APIView):
     def post(self, request):
         username = request.POST.get("username")
         pincode = request.POST.get("pincode")
-        print(username, pincode)
         user = authenticate(username, pincode)
-        print(user)
         if user is not None:
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({"data": {
-                "token": token.key
-            }})
+            # token, created = Token.objects.get_or_create(user=user)
+            token = update_or_create_user_token(user=user)
+            if token is not None:
+                use_pin_code(pincode)
+                return Response({"data": {
+                    "token": token.key
+                }})
         return Response({"data": None})

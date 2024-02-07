@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.utils import timezone
 from django.db.models.query import QuerySet
+from django.db import transaction
+from rest_framework.authtoken.models import Token
 from auth_app.models import Pin
 from auth_app.models import User
 
@@ -65,3 +67,18 @@ def use_pin(pin: Pin) -> Pin:
     pin.used = True
     pin.save()
     return pin
+
+
+def use_pin_code(pin_code: str) -> None:
+    """Гасит (делает использованным) pin_code"""
+    pin = Pin.objects.filter(pin_code=pin_code).first()
+    if pin:
+        use_pin(pin=pin)
+
+
+def update_or_create_user_token(user: User) -> Token | None:
+    token = None
+    with transaction.atomic():
+        Token.objects.filter(user=user).delete()
+        token = Token.objects.create(user=user)
+    return token
