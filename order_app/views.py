@@ -14,7 +14,10 @@ from order_app.serializers import (
     ItemOrderSerializer,
     SimpleItemOrderSerializer
 )
-from order_app.services.order import handle_order_list
+from order_app.services.order import (
+    handle_order_list,
+    order_by_id
+)
 
 
 class ContractView(APIView):
@@ -35,9 +38,9 @@ class OrderView(APIView):
 
     def get(self, request):
         client = request.user.client
-        order_id = request.GET.get("id", None)
-        if order_id:
-            queryset = Order.objects.filter(id=order_id, client=client)
+        order = order_by_id(order_id=request.GET.get("id"))
+        if order:
+            queryset = [order]
         else:
             queryset = Order.objects.filter(client=client)
         serializer = OrderSerializer(queryset, many=True)
@@ -46,7 +49,7 @@ class OrderView(APIView):
 
     def post(self, request):
         response = {"data": []}
-        data = request.data.get("data", None)
+        data = request.data.get("data")
         if not data:
             return Response(response)
         serializer = SimpleOrderSerializer(data=data, many=True)
@@ -62,11 +65,8 @@ class OrderDeleteView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        client = request.user.client
-        order_id = request.GET.get("id", None)
-        if order_id:
-            queryset = Order.objects.filter(id=order_id, client=client)
-            queryset.delete()
+        order = get_object_or_404(Order, id=request.GET.get("id"))
+        order.delete()
         response = {"data": []}
         return Response(response)
 
@@ -76,19 +76,8 @@ class OrderItemView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        order = Order.objects.filter(
-            id=request.GET.get("order_id", None)
-        ).first()
-
-        if order:
-            queryset = ItemOrder.objects.filter(order=order)
-        else:
-            client = request.user.client
-            queryset = ItemOrder.objects.filter(
-                order__in=Order.objects.filter(client=client)
-            )
-
-        serializer = SimpleItemOrderSerializer(queryset, many=True)
+        order = get_object_or_404(Order, id=request.GET.get("id"))
+        serializer = SimpleItemOrderSerializer(order.items, many=True)
         response = {"data": serializer.data}
         return Response(response)
 
@@ -98,11 +87,9 @@ class OrderItemDeleteView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        item = get_object_or_404(ItemOrder, id=request.GET.get("id", None))
+        item = get_object_or_404(ItemOrder, id=request.GET.get("id"))
         order = item.order
-        if item:
-            item.delete()
-        queryset = Order.objects.filter(order=order)
-        serializer = ItemOrderSerializer(queryset, many=True)
+        item.delete()
+        serializer = ItemOrderSerializer(order.items, many=True)
         response = {"data": serializer.data}
         return Response(response)
