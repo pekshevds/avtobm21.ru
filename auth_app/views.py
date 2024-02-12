@@ -28,6 +28,16 @@ class UserView(APIView):
         return Response(response)
 
 
+class UserInfoView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer([request.user], many=True)
+        response = {"data": serializer.data}
+        return Response(response)
+
+
 class PinView(APIView):
     """Отправляет pin для существующего пользователя.
     Пользователь определяется по имени (номеру телефона) или адресу электронной почты.
@@ -57,7 +67,6 @@ class TokenView(APIView):
         pincode = request.POST.get("pincode")
         user = authenticate(username, pincode)
         if user is not None:
-            # token, created = Token.objects.get_or_create(user=user)
             token = update_or_create_user_token(user=user)
             if token is not None:
                 use_pin_code(pincode)
