@@ -9,30 +9,30 @@ from catalog_app.models import (
     Applicability
 )
 
-admin.site.site_header = "Панель администрирования avtobm21.ru"
-admin.site.site_title = "Панель администрирования avtobm21.ru"
-admin.site.index_title = "Добро пожаловать!"
+admin.site.site_header = 'Панель администрирования avtobm21.ru'
+admin.site.site_title = 'Панель администрирования avtobm21.ru'
+admin.site.index_title = 'Добро пожаловать!'
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("__str__", 'id',)
+    list_display = ('__str__', 'id',)
 
 
 @admin.register(Model)
 class ModelAdmin(admin.ModelAdmin):
-    list_display = ("__str__", 'id',)
+    list_display = ('__str__', 'id',)
 
 
 @admin.register(Manufacturer)
 class ManufacturerAdmin(admin.ModelAdmin):
-    list_display = ("__str__", 'id',)
+    list_display = ('__str__', 'id',)
 
 
 class GoodsImageInLine(admin.TabularInline):
     model = GoodsImage
-    fields = ('image', "preview",)
-    readonly_fields = ("preview",)
+    fields = ('image', 'preview',)
+    readonly_fields = ('preview',)
 
     def preview(self, obj):
         if obj.image:
@@ -49,14 +49,14 @@ class ApplicabilityInLine(admin.TabularInline):
 class GoodAdmin(admin.ModelAdmin):
     inlines = [GoodsImageInLine, ApplicabilityInLine]
     list_display = (
-        "name", "art", "category",
-        "is_active", "balance", "price", "preview",
+        'name', 'art', 'category',
+        'is_active', 'balance', 'price', 'preview',
     )
-    search_fields = ("name", "art",)
+    search_fields = ('name', 'art',)
 
     def preview(self, obj):
         if obj.image:
             str = f"<img src={obj.image.image.url} style='max-height: 75px;'>"
             return format_html(str)
 
-    preview.short_description = "Изображение (превью)"
+    preview.short_description = 'Изображение (превью)'
