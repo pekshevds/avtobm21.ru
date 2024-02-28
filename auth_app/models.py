@@ -34,6 +34,9 @@ class User(AbstractUser):
         on_delete=models.PROTECT,
         related_name="users"
     )
+    email = models.EmailField(_("email address"),
+                              blank=False,
+                              unique=True)
 
     class Meta:
         verbose_name = "Пользователь"
