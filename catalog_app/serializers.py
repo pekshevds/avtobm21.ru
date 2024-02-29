@@ -32,8 +32,7 @@ class GoodSerializer(serializers.Serializer):
         max_digits=15, decimal_places=2, required=False)
     category = CategorySerializer(required=False, allow_null=True)
     manufacturer = ManufacturerSerializer(required=False, allow_null=True)
-    preview = ImageSerializer(required=False, allow_null=True,
-                              source="image", read_only=True)
+    image = ImageSerializer(required=False, allow_null=True, read_only=True)
     images = GoodsImageSerializer(required=False, allow_null=True,
                                   many=True, read_only=True)
 
@@ -49,7 +48,6 @@ class SimpleGoodSerializer(serializers.Serializer):
         max_digits=15, decimal_places=2, required=False)
     category_id = serializers.UUIDField(required=False, allow_null=True)
     manufacturer_id = serializers.UUIDField(required=False, allow_null=True)
-    preview = ImageSerializer(required=False, allow_null=True,
-                              source="image", read_only=True)
+    image = ImageSerializer(required=False, allow_null=True, read_only=True)
     images = GoodsImageSerializer(required=False, allow_null=True,
                                   many=True, read_only=True)

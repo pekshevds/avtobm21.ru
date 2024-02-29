@@ -17,7 +17,7 @@ class AdvertisementView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
-        queryset = Advertisement.objects.all()
+        queryset = Advertisement.objects.filter(is_active=True)
         serializer = AdvertisementSerializer(queryset, many=True)
         response = {"data": serializer.data}
         return Response(response)
