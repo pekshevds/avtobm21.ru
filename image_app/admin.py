@@ -10,9 +10,11 @@ class ImageAdmin(admin.ModelAdmin):
     readonly_fields = ('preview',)
 
     def preview(self, obj):
+        result = ''
         if obj.image:
-            str = "f'<img src={obj.image.url} style='max-height: 75px;'>"
-            return format_html(str)
-        return ''
+            result = format_html(
+                f"'<img src={obj.image.url} style='max-height: 75px;'>"
+            )
+        return result
 
     preview.short_description = 'Изображение'
