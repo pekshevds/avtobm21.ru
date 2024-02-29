@@ -101,7 +101,8 @@ class ValuePropertyOfAnAdvertisement(Base):
     advertisement = models.ForeignKey(
         Advertisement,
         on_delete=models.PROTECT,
-        verbose_name="Рекламное объявление"
+        verbose_name="Рекламное объявление",
+        related_name="properties"
     )
     property = models.ForeignKey(
         Property,
