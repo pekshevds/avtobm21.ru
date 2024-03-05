@@ -21,9 +21,10 @@ def handle_order(order_dir: dir) -> Order:
     order_id = order_dir.get('id', None)
     order = order_by_id(order_id)
     if order is None:
-        order = Order.objects.create(
-            id=order_id
-        )
+        if order_id:
+            order = Order.objects.create(id=order_id)
+        else:
+            order = Order.objects.create()
         changed = True
     key_name = 'contract_id'
     if key_name in order_dir:
@@ -49,10 +50,13 @@ def handle_items_order(items_list: List, order: Order) -> None:
         item_order = item_order_by_id(item_order_id=item_order_id)
 
         if item_order is None:
-            item_order = ItemOrder.objects.create(
-                id=item_order_id,
-                order=order
-            )
+            if item_order_id:
+                item_order = ItemOrder.objects.create(
+                    id=item_order_id,
+                    order=order
+                )
+            else:
+                item_order = ItemOrder.objects.create(order=order)
             changed = True
 
         key_name = 'good_id'

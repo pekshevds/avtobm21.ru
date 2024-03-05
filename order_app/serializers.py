@@ -61,6 +61,7 @@ class OrderSerializer(serializers.Serializer):
 
 
 class SimpleOrderSerializer(serializers.Serializer):
+    id = serializers.UUIDField(read_only=True, required=False)
     number = serializers.IntegerField(read_only=True, required=False)
     date = serializers.DateTimeField(
         format='%Y-%m-%d', read_only=True, required=False

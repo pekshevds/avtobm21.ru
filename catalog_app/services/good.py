@@ -1,3 +1,4 @@
+from typing import List
 from django.db.models import Q
 from django.db import transaction
 from catalog_app.models import (
@@ -28,14 +29,14 @@ def handle_applicability(model: Model, good: Good) -> None:
     return applicability
 
 
-def handle_applicability_list(applicability_list: [dir], good: Good):
+def handle_applicability_list(applicability_list: List[dir], good: Good):
     for applicability_dir in applicability_list:
         model = handle_model(applicability_dir)
         if model:
             handle_applicability(model, good)
 
 
-def handle_image_list(image_list: [dir], good: Good):
+def handle_image_list(image_list: List[dir], good: Good):
     for image_dir in image_list:
         model = handle_model(image_dir)
         if model:
@@ -46,9 +47,11 @@ def handle_good(good_dir: dir) -> Good:
     good_id = good_dir.get('id', None)
     good = good_by_id(good_id)
     if good is None:
-        good = Good.objects.create(
-            id=good_id,
-        )
+        if good_id:
+            good = Good.objects.create(id=good_id)
+        else:
+            good = Good.objects.create()
+
     good.name = good_dir.get('name', good.name)
     good.price = good_dir.get('price', good.price)
     good.balance = good_dir.get('balance', good.balance)
@@ -70,7 +73,7 @@ def handle_good(good_dir: dir) -> Good:
     return good
 
 
-def handle_good_list(good_list: None) -> [Good]:
+def handle_good_list(good_list: None) -> List[Good]:
     goods_id = []
     with transaction.atomic():
         for good_item in good_list:
@@ -99,19 +102,19 @@ def fetch_goods_queryset_by_name_or_article(search: str):
     return queryset
 
 
-def fetch_goods_queryset_by_category(categories: [Category]):
+def fetch_goods_queryset_by_category(categories: List[Category]):
     queryset = Good.objects.filter(category__in=categories)
     return queryset
 
 
-def fetch_goods_queryset_by_manufacturer(manufacturers: [Manufacturer]):
+def fetch_goods_queryset_by_manufacturer(manufacturers: List[Manufacturer]):
     queryset = Good.objects.filter(manufacturer__in=manufacturers)
     return queryset
 
 
 def fetch_goods_queryset_by_filters(
-        categories: [Category],
-        manufacturers: [Manufacturer]
+        categories: List[Category],
+        manufacturers: List[Manufacturer]
         ):
     filters = Q()
     if categories:

@@ -10,15 +10,20 @@ def customer_by_id(customer_id: str) -> Customer:
 
 
 def handle_customer(customer_dir: dir) -> Customer:
-    customer_id = customer_dir.get('id', None)
+    customer_id = customer_dir.get('id', "")
     customer_name = customer_dir.get('name', "")
     customer_inn = customer_dir.get('inn', "")
     customer = customer_by_id(customer_id)
     if customer is None:
-        customer = Customer.objects.create(
-            id=customer_id,
-            name=customer_name
-        )
+        if customer_id:
+            customer = Customer.objects.create(
+                id=customer_id,
+                name=customer_name
+            )
+        else:
+            customer = Customer.objects.create(
+                name=customer_name
+            )
     customer.name = customer_name
     customer.inn = customer_inn
     customer.save()

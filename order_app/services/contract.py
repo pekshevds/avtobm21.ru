@@ -14,7 +14,7 @@ def contract_by_id(contract_id: str) -> Contract:
 
 
 def handle_contract(contract_dir: dir) -> Contract:
-    contract_id = contract_dir.get('id', None)
+    contract_id = contract_dir.get('id', "")
     contract_name = contract_dir.get('name', "")
     contract_number = contract_dir.get('number', "")
     contract_date = contract_dir.get('date', None)
@@ -22,10 +22,15 @@ def handle_contract(contract_dir: dir) -> Contract:
         contract_date = datetime.strptime(contract_date, '%Y-%m-%d')"""
     contract = contract_by_id(contract_id)
     if contract is None:
-        contract = Contract.objects.create(
-            id=contract_id,
-            name=contract_name
-        )
+        if contract_id:
+            contract = Contract.objects.create(
+                id=contract_id,
+                name=contract_name
+            )
+        else:
+            contract = Contract.objects.create(
+                name=contract_name
+            )
     contract.number = contract_number
     contract.date = contract_date
     key_name = 'customer'

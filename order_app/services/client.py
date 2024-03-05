@@ -10,14 +10,17 @@ def client_by_id(client_id: str) -> Client:
 
 
 def handle_client(client_dir: dir) -> Client:
-    client_id = client_dir.get('id', None)
+    client_id = client_dir.get('id', "")
     client_name = client_dir.get('name', "")
     client = client_by_id(client_id)
     if client is None:
-        client = Client.objects.create(
-            id=client_id,
-            name=client_name
-        )
+        if client_id:
+            client = Client.objects.create(
+                id=client_id,
+                name=client_name
+            )
+        else:
+            client = Client.objects.create(name=client_name)
     client.name = client_name
     client.save()
     return client

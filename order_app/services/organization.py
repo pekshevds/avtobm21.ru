@@ -10,15 +10,20 @@ def organization_by_id(organization_id: str) -> Organization:
 
 
 def handle_organization(organization_dir: dir) -> Organization:
-    organization_id = organization_dir.get('id', None)
+    organization_id = organization_dir.get('id', "")
     organization_name = organization_dir.get('name', "")
     organization_inn = organization_dir.get('inn', "")
     organization = organization_by_id(organization_id)
     if organization is None:
-        organization = Organization.objects.create(
-            id=organization_id,
-            name=organization_name
-        )
+        if organization_id:
+            organization = Organization.objects.create(
+                id=organization_id,
+                name=organization_name
+            )
+        else:
+            organization = Organization.objects.create(
+                name=organization_name
+            )
     organization.name = organization_name
     organization.inn = organization_inn
     organization.save()
