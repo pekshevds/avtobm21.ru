@@ -1,3 +1,4 @@
+from typing import List
 from django.db import transaction
 from order_app.models import (
     Organization
@@ -24,7 +25,7 @@ def handle_organization(organization_dir: dir) -> Organization:
     return organization
 
 
-def handle_organization_list(organization_list: None) -> [Organization]:
+def handle_organization_list(organization_list: None) -> List[Organization]:
     organization_id = []
     with transaction.atomic():
         for organization_item in organization_list:

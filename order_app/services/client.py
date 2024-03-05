@@ -1,3 +1,4 @@
+from typing import List
 from django.db import transaction
 from order_app.models import (
     Client
@@ -22,7 +23,7 @@ def handle_client(client_dir: dir) -> Client:
     return client
 
 
-def handle_client_list(client_list: None) -> [Client]:
+def handle_client_list(client_list: None) -> List[Client]:
     client_id = []
     with transaction.atomic():
         for client_item in client_list:

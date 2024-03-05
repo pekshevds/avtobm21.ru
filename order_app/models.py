@@ -45,7 +45,8 @@ class Contract(Directory):
         verbose_name="Номер",
         max_length=25,
         null=True,
-        blank=True
+        blank=True,
+        default="б/н"
     )
     date = models.DateField(
         verbose_name="Дата",
@@ -70,7 +71,7 @@ class Contract(Directory):
     )
 
     def __str__(self) -> str:
-        return f"№{self.number} от {format(self.date, 'd F Y')}"
+        return f"{self.name} №{self.number} от {format(self.date, 'd F Y')}"
 
     class Meta:
         verbose_name = "Договор"

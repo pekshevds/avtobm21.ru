@@ -1,3 +1,4 @@
+from typing import List
 from django.db import transaction
 from order_app.models import (
     Order,
@@ -41,7 +42,7 @@ def handle_order(order_dir: dir) -> Order:
     return order
 
 
-def handle_items_order(items_list: [], order: Order) -> None:
+def handle_items_order(items_list: List, order: Order) -> None:
     changed = False
     for item_dir in items_list:
         item_order_id = item_dir.get("id", None)
@@ -79,7 +80,7 @@ def handle_items_order(items_list: [], order: Order) -> None:
             item_order.save()
 
 
-def handle_order_list(order_list: None) -> [Order]:
+def handle_order_list(order_list: None) -> List[Order]:
     orders_id = []
     with transaction.atomic():
         for order_item in order_list:

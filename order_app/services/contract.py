@@ -1,4 +1,5 @@
 """from datetime import datetime"""
+from typing import List
 from django.db import transaction
 from order_app.models import (
     Contract
@@ -46,7 +47,7 @@ def handle_contract(contract_dir: dir) -> Contract:
     return contract
 
 
-def handle_contract_list(contract_list: None) -> [Contract]:
+def handle_contract_list(contract_list: None) -> List[Contract]:
     contract_id = []
     with transaction.atomic():
         for contract_item in contract_list:
