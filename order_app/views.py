@@ -54,7 +54,7 @@ class OrderView(APIView):
             return Response(response)
         serializer = SimpleOrderSerializer(data=data, many=True)
         if serializer.is_valid(raise_exception=True):
-            queryset = handle_order_list(order_list=data)
+            queryset = handle_order_list(order_list=data, author=request.user)
             serializer = OrderSerializer(queryset, many=True)
             response["data"] = serializer.data
         return Response(response)

@@ -4,6 +4,7 @@ from order_app.models import (
     Order,
     ItemOrder
 )
+from auth_app.models import User
 from order_app.services.contract import contract_by_id
 from catalog_app.services.good import good_by_id
 
@@ -16,7 +17,7 @@ def item_order_by_id(item_order_id: str) -> ItemOrder:
     return ItemOrder.objects.filter(id=item_order_id).first()
 
 
-def handle_order(order_dir: dir) -> Order:
+def handle_order(order_dir: dir, author: None | User) -> Order:
     changed = False
     order_id = order_dir.get('id', None)
     order = order_by_id(order_id)
@@ -25,6 +26,7 @@ def handle_order(order_dir: dir) -> Order:
             order = Order.objects.create(id=order_id)
         else:
             order = Order.objects.create()
+        order.author = author
         changed = True
     key_name = 'contract_id'
     if key_name in order_dir:
@@ -84,10 +86,10 @@ def handle_items_order(items_list: List, order: Order) -> None:
             item_order.save()
 
 
-def handle_order_list(order_list: None) -> List[Order]:
+def handle_order_list(order_list: None, author: None) -> List[Order]:
     orders_id = []
     with transaction.atomic():
         for order_item in order_list:
-            order = handle_order(order_dir=order_item)
+            order = handle_order(order_dir=order_item, author=author)
             orders_id.append(order.id)
     return Order.objects.filter(id__in=orders_id)
