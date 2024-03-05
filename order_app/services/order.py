@@ -70,7 +70,7 @@ def handle_items_order(items_list: List, order: Order) -> None:
             item_order.good = None if good_id is None else \
                 good_by_id(good_id=good_id)
             if not item_order.good:
-                raise ObjectDoesNotExist("contract does't exist")
+                raise ObjectDoesNotExist("good does't exist")
             changed = True
 
         key_name = 'quantity'
