@@ -1,5 +1,6 @@
 from typing import List
 from django.db import transaction
+from django.core.exceptions import ObjectDoesNotExist
 from order_app.models import (
     Order,
     ItemOrder
@@ -33,6 +34,8 @@ def handle_order(order_dir: dir, author: None | User) -> Order:
         contract_id = order_dir.get(key_name)
         order.contract = None if contract_id is None else \
             contract_by_id(contract_id=contract_id)
+        if not order.contract:
+            raise ObjectDoesNotExist("contract does't exist")
         changed = True
 
     key_name = 'items'
@@ -66,6 +69,8 @@ def handle_items_order(items_list: List, order: Order) -> None:
             good_id = item_dir.get(key_name)
             item_order.good = None if good_id is None else \
                 good_by_id(good_id=good_id)
+            if not item_order.good:
+                raise ObjectDoesNotExist("contract does't exist")
             changed = True
 
         key_name = 'quantity'
