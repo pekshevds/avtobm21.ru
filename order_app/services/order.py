@@ -37,12 +37,11 @@ def handle_order(order_dir: dir, author: None | User) -> Order:
         if not order.contract:
             raise ObjectDoesNotExist("contract does't exist")
         changed = True
-
     key_name = 'items'
     if key_name in order_dir:
         items = order_dir.get(key_name)
         handle_items_order(items, order=order)
-
+    order.status = order_dir.get('status', order.status)
     if changed:
         order.save()
     return order

@@ -58,6 +58,8 @@ class OrderSerializer(serializers.Serializer):
     date = serializers.DateTimeField(format='%Y-%m-%d')
     contract = ContractSerializer()
     items = ItemOrderSerializer(many=True)
+    status = serializers.CharField(max_length=2,
+                                   read_only=True, required=False)
 
 
 class SimpleOrderSerializer(serializers.Serializer):
@@ -68,3 +70,5 @@ class SimpleOrderSerializer(serializers.Serializer):
     )
     contract_id = serializers.UUIDField(required=False)
     items = SimpleItemOrderSerializer(many=True, required=False)
+    status = serializers.CharField(max_length=2,
+                                   read_only=True, required=False)

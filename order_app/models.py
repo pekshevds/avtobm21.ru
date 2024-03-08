@@ -79,6 +79,16 @@ class Contract(Directory):
 
 
 class Order(Document):
+
+    PREPARED = "PD"
+    PACKAGED = "PK"
+    SHIPPED = "SH"
+    STATUS_CHOICES = [
+        (PREPARED, "Подготовлен"),
+        (PACKAGED, "Собирается"),
+        (SHIPPED, "Отгружен"),
+    ]
+
     author = models.ForeignKey(
         User,
         verbose_name="Автор",
@@ -113,6 +123,14 @@ class Order(Document):
         null=True,
         blank=True,
         on_delete=models.PROTECT
+    )
+    status = models.CharField(
+        verbose_name="Статус",
+        max_length=2,
+        null=True,
+        blank=True,
+        choices=STATUS_CHOICES,
+        default=PREPARED
     )
 
     def save(self, *args, **kwargs) -> None:

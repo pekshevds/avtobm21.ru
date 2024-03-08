@@ -34,7 +34,7 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = [ItemOrderInLine]
     list_display = ('__str__', 'number', 'date', 'contract',
                     'client', 'customer', 'organization',
-                    'author', 'comment', 'id',)
+                    'author', 'comment', 'id', 'status',)
     search_fields = ('number',)
-    list_filter = ('client', 'customer', 'organization', 'author',)
+    list_filter = ('client', 'customer', 'organization', 'author', 'status',)
     # date_hierarchy = 'date'
