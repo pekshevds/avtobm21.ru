@@ -28,7 +28,8 @@ from catalog_app.services.good import fetch_goods_queryset_by_filters
 
 class ManufacturerView(APIView):
 
-    permission_classes = [permissions.AllowAny]
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request):
         id = request.GET.get("id")
@@ -45,7 +46,8 @@ class ManufacturerView(APIView):
 
 class ModelView(APIView):
 
-    permission_classes = [permissions.AllowAny]
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request):
         id = request.GET.get("id", 0)
@@ -62,7 +64,8 @@ class ModelView(APIView):
 
 class CategoryView(APIView):
 
-    permission_classes = [permissions.AllowAny]
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request):
         id = request.GET.get("id", 0)
@@ -79,7 +82,7 @@ class CategoryView(APIView):
 
 class GoodView(APIView):
 
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request):
