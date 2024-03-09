@@ -38,7 +38,8 @@ class ManufacturerView(APIView):
         else:
             queryset = Manufacturer.objects.all()
             serializer = ManufacturerSerializer(queryset, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)
 
 
@@ -54,7 +55,8 @@ class ModelView(APIView):
         else:
             queryset = Model.objects.all()
             serializer = ModelSerializer(queryset, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)
 
 
@@ -70,7 +72,8 @@ class CategoryView(APIView):
         else:
             queryset = Category.objects.all()
             serializer = CategorySerializer(queryset, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)
 
 
@@ -119,12 +122,13 @@ class GoodView(APIView):
             )
         response = {
             "data": serializer.data,
-            "count": len(queryset)
-            }
+            "count": len(queryset),
+            "success": True}
         return Response(response)
 
     def post(self, request):
-        response = {"data": []}
+        response = {"data": [],
+                    "success": False}
         data = request.data.get("data", None)
         if not data:
             return Response(response)
@@ -133,4 +137,5 @@ class GoodView(APIView):
             queryset = handle_good_list(good_list=data)
             serializer = GoodSerializer(queryset, many=True)
             response["data"] = serializer.data
+            response["success"] = True
         return Response(response)

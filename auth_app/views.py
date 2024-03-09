@@ -24,7 +24,8 @@ class UserView(APIView):
         else:
             queryset = User.objects.filter(is_superuser=False)
             serializer = UserSerializer(queryset, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)
 
 
@@ -34,7 +35,8 @@ class UserInfoView(APIView):
 
     def get(self, request):
         serializer = UserSerializer([request.user], many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)
 
 
@@ -48,12 +50,15 @@ class PinView(APIView):
 
     def get(self, request):
         recipient = request.GET.get("recipient")
+        success = False
         if recipient:
             user = fetch_recipient(recipient)
             if user:
                 pin = add_pin(user)
                 send_pin_code(pin.pin_code, recipient)
-        return Response({"data": None})
+                success = True
+        return Response({"data": None,
+                         "success": success})
 
 
 class TokenView(APIView):
@@ -74,5 +79,7 @@ class TokenView(APIView):
                 use_pin_code(pincode)
                 return Response({"data": {
                     "token": token.key
-                }})
-        return Response({"data": None})
+                },
+                    "success": True})
+        return Response({"data": None,
+                         "success": False})

@@ -44,7 +44,7 @@ def handle_image_list(image_list: List[dir], good: Good):
 
 
 def handle_good(good_dir: dir) -> Good:
-    good_id = good_dir.get('id', None)
+    good_id = good_dir.get('id')
     good = good_by_id(good_id)
     if good is None:
         if good_id:

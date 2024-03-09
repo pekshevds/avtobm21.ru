@@ -19,6 +19,20 @@ def status_by_value(value: str) -> OrderStatus:
     return OrderStatus.objects.filter(value=value).first()
 
 
+def put_order_status(order: Order, status: OrderStatus) -> bool:
+    try:
+        order.status = status
+        order.save()
+        return True
+    except Exception:
+        return False
+
+
+def new_orders() -> Order:
+    status = default_order_status()
+    return Order.objects.filter(status=status)
+
+
 def order_by_id(order_id: str) -> Order:
     return Order.objects.filter(id=order_id).first()
 

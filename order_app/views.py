@@ -5,19 +5,36 @@ from rest_framework import permissions, authentication
 from order_app.models import (
     Contract,
     Order,
-    ItemOrder
+    ItemOrder,
+    OrderStatus
 )
 from order_app.serializers import (
     ContractSerializer,
     SimpleOrderSerializer,
     OrderSerializer,
     ItemOrderSerializer,
-    SimpleItemOrderSerializer
+    SimpleItemOrderSerializer,
+    OrderStatusSerializer
 )
 from order_app.services.order import (
     handle_order_list,
-    order_by_id
+    order_by_id,
+    status_by_value,
+    put_order_status,
+    new_orders
 )
+
+
+class OrderStatusView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        queryset = OrderStatus.objects.all()
+        serializer = OrderStatusSerializer(queryset, many=True)
+        response = {"data": serializer.data,
+                    "success": True}
+        return Response(response)
 
 
 class ContractView(APIView):
@@ -28,7 +45,35 @@ class ContractView(APIView):
         client = request.user.client
         queryset = Contract.objects.filter(client=client)
         serializer = ContractSerializer(queryset, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
+        return Response(response)
+
+
+class PutOrderStatusView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        order = order_by_id(order_id=request.GET.get("id"))
+        status = status_by_value(request.GET.get("value"))
+        success = False
+        if order and status:
+            success = put_order_status(order, status)
+        response = {"data": [],
+                    "success": success}
+        return Response(response)
+
+
+class NewOrdersView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        queryset = new_orders()
+        serializer = OrderSerializer(queryset, many=True)
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)
 
 
@@ -44,11 +89,13 @@ class OrderView(APIView):
         else:
             queryset = Order.objects.filter(client=client)
         serializer = OrderSerializer(queryset, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)
 
     def post(self, request):
-        response = {"data": []}
+        response = {"data": [],
+                    "success": False}
         data = request.data.get("data")
         if not data:
             return Response(response)
@@ -57,6 +104,7 @@ class OrderView(APIView):
             queryset = handle_order_list(order_list=data, author=request.user)
             serializer = OrderSerializer(queryset, many=True)
             response["data"] = serializer.data
+            response["success"] = True
         return Response(response)
 
 
@@ -67,7 +115,8 @@ class OrderDeleteView(APIView):
     def get(self, request):
         order = get_object_or_404(Order, id=request.GET.get("id"))
         order.delete()
-        response = {"data": []}
+        response = {"data": [],
+                    "success": True}
         return Response(response)
 
 
@@ -78,7 +127,8 @@ class OrderItemView(APIView):
     def get(self, request):
         order = get_object_or_404(Order, id=request.GET.get("id"))
         serializer = SimpleItemOrderSerializer(order.items, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)
 
 
@@ -91,5 +141,6 @@ class OrderItemDeleteView(APIView):
         order = item.order
         item.delete()
         serializer = ItemOrderSerializer(order.items, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)

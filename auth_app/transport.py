@@ -1,4 +1,5 @@
 # from django.core.exceptions import ObjectDoesNotExist
+from typing import List
 from django.core.mail import send_mail as send_mail_from_django
 from django.conf import settings
 from auth_app.services import (
@@ -6,11 +7,11 @@ from auth_app.services import (
 )
 
 
-def send_sms(subject: str, message: str, recipient_list: []):
+def send_sms(subject: str, message: str, recipient_list: List[str]):
     pass
 
 
-def send_mail(subject: str, message: str, recipient_list: []):
+def send_mail(subject: str, message: str, recipient_list: List[str]):
     send_mail_from_django(subject=subject,
                           message=message,
                           from_email=None,

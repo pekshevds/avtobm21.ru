@@ -20,7 +20,8 @@ class WishListView(APIView):
     def get(self, request):
         queryset = fetch_users_wish_list(request.user)
         serializer = WishListSerializer(queryset, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)
 
 
@@ -29,12 +30,13 @@ class WishListAddView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        good = get_object_or_404(Good, id=request.GET.get("good_id", None))
+        good = get_object_or_404(Good, id=request.GET.get("good_id"))
         add_to_wish_list(user=request.user, good=good)
 
         queryset = fetch_users_wish_list(request.user)
         serializer = WishListSerializer(queryset, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)
 
 
@@ -43,12 +45,13 @@ class WishListDeleteView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        good = get_object_or_404(Good, id=request.GET.get("good_id", None))
+        good = get_object_or_404(Good, id=request.GET.get("good_id"))
         delete_from_wish_list(user=request.user, good=good)
 
         queryset = fetch_users_wish_list(request.user)
         serializer = WishListSerializer(queryset, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)
 
 
@@ -61,5 +64,6 @@ class WishListClearView(APIView):
 
         queryset = fetch_users_wish_list(request.user)
         serializer = WishListSerializer(queryset, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)

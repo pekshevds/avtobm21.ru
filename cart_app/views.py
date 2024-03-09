@@ -20,7 +20,8 @@ class CartView(APIView):
     def get(self, request):
         queryset = fetch_users_cart(request.user)
         serializer = CartSerializer(queryset, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)
 
 
@@ -29,28 +30,31 @@ class CartAddView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        good = get_object_or_404(Good, id=request.GET.get("good_id", None))
+        good = get_object_or_404(Good, id=request.GET.get("good_id"))
         add_to_cart(user=request.user, good=good)
 
         queryset = fetch_users_cart(request.user)
         serializer = CartSerializer(queryset, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)
 
     def post(self, request):
-        response = {"data": []}
-        data = request.data.get("data", None)
+        response = {"data": [],
+                    "success": False}
+        data = request.data.get("data")
         if not data:
             return Response(response)
         for item in data:
-            good_id = item.get("good_id", None)
+            good_id = item.get("good_id")
             quantity = item.get("quantity", 0)
             good = get_object_or_404(Good, id=good_id)
             add_to_cart(user=request.user, good=good, quantity=quantity)
 
         queryset = fetch_users_cart(request.user)
         serializer = CartSerializer(queryset, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)
 
 
@@ -59,28 +63,31 @@ class CartDeleteView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        good = get_object_or_404(Good, id=request.GET.get("good_id", 0))
+        good = get_object_or_404(Good, id=request.GET.get("good_id"))
         delete_from_cart(user=request.user, good=good)
 
         queryset = fetch_users_cart(request.user)
         serializer = CartSerializer(queryset, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)
 
     def post(self, request):
-        response = {"data": []}
-        data = request.data.get("data", None)
+        response = {"data": [],
+                    "success": False}
+        data = request.data.get("data")
         if not data:
             return Response(response)
         for item in data:
-            good_id = item.get("good_id", None)
+            good_id = item.get("good_id")
             quantity = item.get("quantity", 0)
             good = get_object_or_404(Good, id=good_id)
             delete_from_cart(user=request.user, good=good, quantity=quantity)
 
         queryset = fetch_users_cart(request.user)
         serializer = CartSerializer(queryset, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)
 
 
@@ -93,5 +100,6 @@ class CartClearView(APIView):
 
         queryset = fetch_users_cart(request.user)
         serializer = CartSerializer(queryset, many=True)
-        response = {"data": serializer.data}
+        response = {"data": serializer.data,
+                    "success": True}
         return Response(response)
