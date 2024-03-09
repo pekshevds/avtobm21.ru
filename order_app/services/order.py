@@ -2,12 +2,21 @@ from typing import List
 from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
 from order_app.models import (
+    OrderStatus,
     Order,
     ItemOrder
 )
 from auth_app.models import User
 from order_app.services.contract import contract_by_id
 from catalog_app.services.good import good_by_id
+
+
+def default_order_status() -> OrderStatus:
+    return status_by_value("CR")
+
+
+def status_by_value(value: str) -> OrderStatus:
+    return OrderStatus.objects.filter(value=value).first()
 
 
 def order_by_id(order_id: str) -> Order:

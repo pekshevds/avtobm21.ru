@@ -2,8 +2,14 @@ from django.contrib import admin
 from order_app.models import Customer
 from order_app.models import Organization
 from order_app.models import Contract
+from order_app.models import OrderStatus
 from order_app.models import Order
 from order_app.models import ItemOrder
+
+
+@admin.register(OrderStatus)
+class OrderStatusAdmin(admin.ModelAdmin):
+    list_display = ('name', 'value', 'id',)
 
 
 @admin.register(Customer)

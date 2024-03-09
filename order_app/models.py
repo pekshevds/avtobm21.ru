@@ -78,16 +78,28 @@ class Contract(Directory):
         verbose_name_plural = "Договоры"
 
 
-class Order(Document):
+class OrderStatus(Directory):
+    value = models.CharField(
+        verbose_name="Значение",
+        max_length=2,
+        null=True,
+        blank=True,
+        db_index=True
+    )
 
-    PREPARED = "PD"
-    PACKAGED = "PK"
-    SHIPPED = "SH"
-    STATUS_CHOICES = [
-        (PREPARED, "Подготовлен"),
-        (PACKAGED, "Собирается"),
-        (SHIPPED, "Отгружен"),
-    ]
+    def __str__(self) -> str:
+        return f"{self.name}"
+
+    @classmethod
+    def default_order_status(cls):
+        return cls.objects.filter(value="CR").first()
+
+    class Meta:
+        verbose_name = "Статус заказ покупателя"
+        verbose_name_plural = "Статусы заказов покупателей"
+
+
+class Order(Document):
 
     author = models.ForeignKey(
         User,
@@ -124,13 +136,13 @@ class Order(Document):
         blank=True,
         on_delete=models.PROTECT
     )
-    status = models.CharField(
+    status = models.ForeignKey(
+        OrderStatus,
         verbose_name="Статус",
-        max_length=2,
         null=True,
         blank=True,
-        choices=STATUS_CHOICES,
-        default=PREPARED
+        on_delete=models.PROTECT,
+        default=OrderStatus.default_order_status
     )
 
     def save(self, *args, **kwargs) -> None:
