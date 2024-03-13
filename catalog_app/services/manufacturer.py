@@ -1,4 +1,5 @@
 from typing import List
+from django.db.models.query import QuerySet
 from django.db import transaction
 from catalog_app.models import (
     Manufacturer
@@ -9,8 +10,8 @@ def manufacturer_by_id(id: str) -> Manufacturer:
     return Manufacturer.objects.filter(id=id).first()
 
 
-def manufacturer_by_id_list(id: List[str]) -> List[Manufacturer]:
-    return list(Manufacturer.objects.filter(id__in=id))
+def manufacturer_by_id_list(id: List[str]) -> QuerySet[Manufacturer]:
+    return Manufacturer.objects.filter(id__in=id)
 
 
 def handle_manufacturer(item_dir: dir) -> Manufacturer:
@@ -26,7 +27,7 @@ def handle_manufacturer(item_dir: dir) -> Manufacturer:
     return item
 
 
-def handle_manufacturer_list(item_list: List[dir]) -> List[Manufacturer]:
+def handle_manufacturer_list(item_list: List[dir]) -> QuerySet[Manufacturer]:
     items_id = []
     with transaction.atomic():
         for item_dir in item_list:
