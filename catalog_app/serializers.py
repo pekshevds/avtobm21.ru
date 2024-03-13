@@ -21,6 +21,10 @@ class GoodsImageSerializer(serializers.Serializer):
     image = ImageSerializer(required=False, allow_null=True)
 
 
+class GoodsApplicabilitySerializer(serializers.Serializer):
+    model = ModelSerializer(required=False, allow_null=True)
+
+
 class GoodSerializer(serializers.Serializer):
     id = serializers.UUIDField()
     name = serializers.CharField(max_length=150)
@@ -35,6 +39,9 @@ class GoodSerializer(serializers.Serializer):
     image = ImageSerializer(required=False, allow_null=True, read_only=True)
     images = GoodsImageSerializer(required=False, allow_null=True,
                                   many=True, read_only=True)
+    applicabilities = GoodsApplicabilitySerializer(
+        required=False, allow_null=True,
+        many=True, read_only=True)
 
 
 class SimpleGoodSerializer(serializers.Serializer):
@@ -51,3 +58,6 @@ class SimpleGoodSerializer(serializers.Serializer):
     image = ImageSerializer(required=False, allow_null=True, read_only=True)
     images = GoodsImageSerializer(required=False, allow_null=True,
                                   many=True, read_only=True)
+    applicabilities = GoodsApplicabilitySerializer(
+        required=False, allow_null=True,
+        many=True, read_only=True)

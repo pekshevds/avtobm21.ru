@@ -127,7 +127,7 @@ class Applicability(Base):
         Good,
         on_delete=models.PROTECT,
         verbose_name="Номенклатура",
-        related_name="applicability"
+        related_name="applicabilities"
     )
     model = models.ForeignKey(
         Model,
