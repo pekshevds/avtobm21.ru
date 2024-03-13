@@ -120,3 +120,10 @@ def handle_order_list(order_list: None, author: None) -> List[Order]:
             order = handle_order(order_dir=order_item, author=author)
             orders_id.append(order.id)
     return Order.objects.filter(id__in=orders_id)
+
+
+def handle_order_status_list(items_list: List,) -> None:
+    for item in items_list:
+        order = order_by_id(item.get("id"))
+        status = status_by_value(item.get("value"))
+        put_order_status(order, status)

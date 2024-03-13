@@ -21,7 +21,8 @@ from order_app.services.order import (
     order_by_id,
     status_by_value,
     put_order_status,
-    new_orders
+    new_orders,
+    handle_order_status_list
 )
 
 
@@ -62,6 +63,16 @@ class PutOrderStatusView(APIView):
             success = put_order_status(order, status)
         response = {"data": [],
                     "success": success}
+        return Response(response)
+
+    def post(self, request):
+        response = {"data": [],
+                    "success": False}
+        data = request.data.get("data")
+        if not data:
+            return Response(response)
+        handle_order_status_list(data)
+        response["success"] = True
         return Response(response)
 
 
