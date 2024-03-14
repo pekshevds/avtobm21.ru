@@ -1,4 +1,6 @@
+from typing import List
 from django.db import transaction
+from django.db.models.query import QuerySet
 from catalog_app.models import (
     Model
 )
@@ -20,7 +22,7 @@ def handle_model(item_dir: dir) -> Model:
     return item
 
 
-def handle_model_list(item_list: [dir]) -> [Model]:
+def handle_model_list(item_list: List[dir]) -> QuerySet[Model]:
     items_id = []
     with transaction.atomic():
         for item_dir in item_list:
