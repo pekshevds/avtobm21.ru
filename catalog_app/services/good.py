@@ -1,4 +1,6 @@
 from typing import List
+import json
+from threading import Thread
 from django.db.models.query import QuerySet
 from django.db.models import Q
 from django.db import transaction
@@ -15,9 +17,6 @@ from catalog_app.services.category import (
 )
 from catalog_app.services.manufacturer import handle_manufacturer
 from catalog_app.services.model import handle_model
-
-
-category = default_category()
 
 
 def goods_with_empty_category() -> QuerySet[Good]:
@@ -72,6 +71,7 @@ def handle_good(good_dir: dir) -> Good:
     key_name = 'category'
     if key_name in good_dir:
         temp_dir = good_dir.get(key_name)
+        category = default_category()
         good.category = category if temp_dir is None else \
             handle_category(temp_dir)
 
@@ -82,6 +82,22 @@ def handle_good(good_dir: dir) -> Good:
             handle_manufacturer(temp_dir)
     good.save()
     return good
+
+
+def save_good_list_into_file(good_list: None) -> str:
+    file_name = "data.json"
+    with open(file_name, "w", encoding="utf-8") as file:
+        json.dump(good_list, file)
+    return file_name
+
+
+def load_good_list_from_file(file_name: str) -> bool:
+    with open(file_name, "r", encoding="utf-8") as file:
+        good_list = [item for item in json.loads(file.read())]
+        # handle_good_list(good_list=good_list)
+        thread = Thread(target=handle_good_list, args=[good_list])
+        thread.start()
+    return True
 
 
 def handle_good_list(good_list: None) -> QuerySet[Good]:
