@@ -139,7 +139,7 @@ LOGGING = {
         },
     },
     "loggers": {
-        "django": {
+        "order_app.views": {
             "handlers": ["file"],
             "level": "INFO",
             "propagate": True,
