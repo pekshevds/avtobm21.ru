@@ -1,3 +1,4 @@
+from django.http import HttpRequest
 from rest_framework import permissions, authentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -16,7 +17,7 @@ class UserView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request):
+    def get(self, request: HttpRequest):
         username = request.GET.get("username", None)
         if username:
             queryset = User.objects.filter(username=username)
@@ -33,7 +34,7 @@ class UserInfoView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request):
+    def get(self, request: HttpRequest):
         serializer = UserSerializer([request.user], many=True)
         response = {"data": serializer.data,
                     "success": True}
@@ -48,7 +49,7 @@ class PinView(APIView):
     """
     permission_classes = [permissions.AllowAny]
 
-    def get(self, request):
+    def get(self, request: HttpRequest):
         recipient = request.GET.get("recipient")
         success = False
         if recipient:
@@ -69,7 +70,7 @@ class TokenView(APIView):
     """
     permission_classes = [permissions.AllowAny]
 
-    def post(self, request):
+    def post(self, request: HttpRequest):
         username = request.POST.get("username")
         pincode = request.POST.get("pincode")
         user = authenticate(username, pincode)

@@ -1,3 +1,4 @@
+import logging
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -24,6 +25,8 @@ from order_app.services.order import (
     new_orders,
     handle_order_status_list
 )
+
+logger = logging.getLogger(__name__)
 
 
 class OrderStatusView(APIView):
@@ -110,6 +113,7 @@ class OrderView(APIView):
         data = request.data.get("data")
         if not data:
             return Response(response)
+        logger.info(data)
         serializer = SimpleOrderSerializer(data=data, many=True)
         if serializer.is_valid(raise_exception=True):
             queryset = handle_order_list(order_list=data, author=request.user)

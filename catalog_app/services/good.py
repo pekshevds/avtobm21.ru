@@ -28,7 +28,7 @@ def good_by_id(good_id: str) -> Good:
     return Good.objects.filter(id=good_id).first()
 
 
-def handle_applicability(model: Model, good: Good) -> None:
+def handle_applicability(model: Model, good: Good) -> Applicability:
     applicability = Applicability.objects.filter(
         model=model, good=good
     ).first()
