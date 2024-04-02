@@ -18,7 +18,9 @@ from catalog_app.serializers import (
     CategorySerializer
 )
 from catalog_app.services.good import (
-    handle_good_list,
+    # handle_good_list,
+    save_good_list_into_file,
+    load_good_list_from_file,
     fetch_goods_queryset_by_name_or_article
 )
 from catalog_app.services.category import category_by_id_list
@@ -137,8 +139,12 @@ class GoodView(APIView):
             return Response(response)
         serializer = GoodSerializer(data=data, many=True)
         if serializer.is_valid(raise_exception=True):
-            queryset = handle_good_list(good_list=data)
-            serializer = GoodSerializer(queryset, many=True)
-            response["data"] = serializer.data
+            # queryset = handle_good_list(good_list=data)
+            # queryset = handle_good_list(good_list=[item for item in data])
+            # serializer = GoodSerializer(queryset, many=True)
+            # response["data"] = serializer.data
+
+            file_name = save_good_list_into_file(good_list=data)
+            load_good_list_from_file(file_name=file_name)
             response["success"] = True
         return Response(response)

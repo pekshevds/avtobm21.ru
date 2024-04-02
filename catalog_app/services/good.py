@@ -1,4 +1,7 @@
 from typing import List
+import json
+from threading import Thread
+import logging
 from django.db.models.query import QuerySet
 from django.db.models import Q
 from django.db import transaction
@@ -15,9 +18,11 @@ from catalog_app.services.category import (
 )
 from catalog_app.services.manufacturer import handle_manufacturer
 from catalog_app.services.model import handle_model
+from django.conf import settings
 
 
-category = default_category()
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 def goods_with_empty_category() -> QuerySet[Good]:
@@ -72,6 +77,7 @@ def handle_good(good_dir: dir) -> Good:
     key_name = 'category'
     if key_name in good_dir:
         temp_dir = good_dir.get(key_name)
+        category = default_category()
         good.category = category if temp_dir is None else \
             handle_category(temp_dir)
 
@@ -84,7 +90,24 @@ def handle_good(good_dir: dir) -> Good:
     return good
 
 
+def save_good_list_into_file(good_list: None) -> str:
+    file_name = settings.BASE_DIR / "data.json"
+    with open(file_name, "w", encoding="utf-8") as file:
+        json.dump(good_list, file)
+    return file_name
+
+
+def load_good_list_from_file(file_name: str) -> bool:
+    with open(file_name, "r", encoding="utf-8") as file:
+        good_list = [item for item in json.loads(file.read())]
+        # handle_good_list(good_list=good_list)
+        thread = Thread(target=handle_good_list, args=[good_list])
+        thread.start()
+    return True
+
+
 def handle_good_list(good_list: None) -> QuerySet[Good]:
+    logger.info("start loading data.")
     goods_id = []
     with transaction.atomic():
         for good_item in good_list:
@@ -101,7 +124,7 @@ def handle_good_list(good_list: None) -> QuerySet[Good]:
                 handle_image_list(temp_dir, good)
 
             goods_id.append(good.id)
-
+    logger.info("finish loading data.")
     return Good.objects.filter(id__in=goods_id)
 
 

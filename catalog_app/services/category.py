@@ -6,8 +6,8 @@ from catalog_app.models import (
 )
 
 
-def default_category() -> Category:
-    return Category.objects.filter(name="Прочее").first()
+def default_category(name: str = "Прочее") -> Category:
+    return Category.objects.filter(name=name).first()
 
 
 def category_by_id(id: str) -> Category:
