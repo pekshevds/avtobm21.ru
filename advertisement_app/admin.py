@@ -11,12 +11,12 @@ from advertisement_app.models import (
 
 @admin.register(GroupOfProperty)
 class GroupOfPropertyAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'id',)
+    list_display = ('__str__', 'id', 'ordering',)
 
 
 @admin.register(Property)
 class PropertyAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'id', 'group',)
+    list_display = ('__str__', 'id', 'group', 'ordering',)
 
 
 class AdvertisementsImageInLine(admin.TabularInline):

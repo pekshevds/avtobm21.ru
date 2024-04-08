@@ -7,13 +7,30 @@ from catalog_app.commons import secret_from_string
 
 
 class GroupOfProperty(Directory):
+    ordering = models.DecimalField(
+        verbose_name="Порядок сортировки",
+        max_digits=4,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        default=0
+    )
 
     class Meta:
         verbose_name = "Группа свойств"
         verbose_name_plural = "Группы свойств объевлений"
+        ordering = ["ordering"]
 
 
 class Property(Directory):
+    ordering = models.DecimalField(
+        verbose_name="Порядок сортировки",
+        max_digits=4,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        default=0
+    )
     group = models.ForeignKey(
         GroupOfProperty,
         on_delete=models.PROTECT,
@@ -30,6 +47,7 @@ class Property(Directory):
     class Meta:
         verbose_name = "Свойство"
         verbose_name_plural = "Свойства объявлений"
+        ordering = ["ordering"]
 
 
 class Advertisement(Directory):

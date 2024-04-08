@@ -1,3 +1,4 @@
+from django.http import HttpRequest
 from django.core.paginator import Paginator
 from rest_framework import (
     permissions,
@@ -33,7 +34,7 @@ class ManufacturerView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get(self, request):
+    def get(self, request: HttpRequest) -> Response:
         id = request.GET.get("id")
         if id:
             queryset = Manufacturer.objects.filter(id=id)
@@ -51,7 +52,7 @@ class ModelView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get(self, request):
+    def get(self, request: HttpRequest) -> Response:
         id = request.GET.get("id", 0)
         if id:
             queryset = Model.objects.filter(id=id)
@@ -69,7 +70,7 @@ class CategoryView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get(self, request):
+    def get(self, request: HttpRequest) -> Response:
         id = request.GET.get("id", 0)
         if id:
             queryset = Category.objects.filter(id=id)
@@ -87,7 +88,7 @@ class GoodView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get(self, request):
+    def get(self, request: HttpRequest) -> Response:
         id = request.GET.get("id", 0)
         if id:
             queryset = Good.objects.filter(id=id)
@@ -131,7 +132,7 @@ class GoodView(APIView):
             "success": True}
         return Response(response)
 
-    def post(self, request):
+    def post(self, request: HttpRequest) -> Response:
         response = {"data": [],
                     "success": False}
         data = request.data.get("data", None)

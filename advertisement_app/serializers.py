@@ -5,12 +5,16 @@ from image_app.serializers import ImageSerializer
 class GroupOfPropertySerializer(serializers.Serializer):
     id = serializers.UUIDField()
     name = serializers.CharField(max_length=150)
+    ordering = serializers.DecimalField(
+        max_digits=4, decimal_places=2, required=False)
 
 
 class PropertySerializer(serializers.Serializer):
     id = serializers.UUIDField()
     name = serializers.CharField(max_length=150)
     group = GroupOfPropertySerializer(required=False, allow_null=True)
+    ordering = serializers.DecimalField(
+        max_digits=4, decimal_places=2, required=False)
 
 
 class AdvertisementsImageSerializer(serializers.Serializer):

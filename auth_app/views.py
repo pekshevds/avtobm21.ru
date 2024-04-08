@@ -17,7 +17,7 @@ class UserView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request: HttpRequest):
+    def get(self, request: HttpRequest) -> Response:
         username = request.GET.get("username", None)
         if username:
             queryset = User.objects.filter(username=username)
@@ -34,7 +34,7 @@ class UserInfoView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request: HttpRequest):
+    def get(self, request: HttpRequest) -> Response:
         serializer = UserSerializer([request.user], many=True)
         response = {"data": serializer.data,
                     "success": True}
@@ -49,7 +49,7 @@ class PinView(APIView):
     """
     permission_classes = [permissions.AllowAny]
 
-    def get(self, request: HttpRequest):
+    def get(self, request: HttpRequest) -> Response:
         recipient = request.GET.get("recipient")
         success = False
         if recipient:
@@ -70,7 +70,7 @@ class TokenView(APIView):
     """
     permission_classes = [permissions.AllowAny]
 
-    def post(self, request: HttpRequest):
+    def post(self, request: HttpRequest) -> Response:
         username = request.POST.get("username")
         pincode = request.POST.get("pincode")
         user = authenticate(username, pincode)

@@ -1,3 +1,4 @@
+from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -17,7 +18,7 @@ class CartView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request):
+    def get(self, request: HttpRequest) -> Response:
         queryset = fetch_users_cart(request.user)
         serializer = CartSerializer(queryset, many=True)
         response = {"data": serializer.data,
@@ -29,7 +30,7 @@ class CartAddView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request):
+    def get(self, request: HttpRequest) -> Response:
         good = get_object_or_404(Good, id=request.GET.get("good_id"))
         add_to_cart(user=request.user, good=good)
 
@@ -39,7 +40,7 @@ class CartAddView(APIView):
                     "success": True}
         return Response(response)
 
-    def post(self, request):
+    def post(self, request: HttpRequest) -> Response:
         response = {"data": [],
                     "success": False}
         data = request.data.get("data")
@@ -62,7 +63,7 @@ class CartDeleteView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request):
+    def get(self, request: HttpRequest) -> Response:
         good = get_object_or_404(Good, id=request.GET.get("good_id"))
         delete_from_cart(user=request.user, good=good)
 
@@ -72,7 +73,7 @@ class CartDeleteView(APIView):
                     "success": True}
         return Response(response)
 
-    def post(self, request):
+    def post(self, request: HttpRequest) -> Response:
         response = {"data": [],
                     "success": False}
         data = request.data.get("data")
@@ -95,7 +96,7 @@ class CartClearView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request):
+    def get(self, request: HttpRequest) -> Response:
         clear_cart(user=request.user)
 
         queryset = fetch_users_cart(request.user)
