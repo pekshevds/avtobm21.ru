@@ -1,6 +1,7 @@
 import logging
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, authentication
@@ -28,6 +29,8 @@ from order_app.services.order import (
 )
 
 logger = logging.getLogger(__name__)
+default_number_of_page = 1
+item_count_per_page = 5
 
 
 class OrderStatusView(APIView):
@@ -102,14 +105,21 @@ class OrderView(APIView):
         if order:
             queryset = [order]
         else:
+            page_number = request.GET.get("page", default_number_of_page)
+            count = request.GET.get("count", item_count_per_page)
+
             queryset = Order.objects.filter(client=client)
+            paginator = Paginator(queryset, count)
+            queryset = paginator.get_page(page_number)
         serializer = OrderSerializer(queryset, many=True)
         response = {"data": serializer.data,
+                    "count": len(queryset),
                     "success": True}
         return Response(response)
 
     def post(self, request: HttpRequest) -> Response:
         response = {"data": [],
+                    "count": 0,
                     "success": False}
         data = request.data.get("data")
         if not data:
@@ -118,8 +128,11 @@ class OrderView(APIView):
         serializer = SimpleOrderSerializer(data=data, many=True)
         if serializer.is_valid(raise_exception=True):
             queryset = handle_order_list(order_list=data, author=request.user)
+            paginator = Paginator(queryset, default_number_of_page)
+            queryset = paginator.get_page(item_count_per_page)
             serializer = OrderSerializer(queryset, many=True)
             response["data"] = serializer.data
+            response["count"] = len(queryset)
             response["success"] = True
         return Response(response)
 
