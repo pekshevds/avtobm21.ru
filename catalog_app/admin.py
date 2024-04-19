@@ -16,7 +16,7 @@ admin.site.index_title = 'Добро пожаловать!'
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'id',)
+    list_display = ('__str__', 'id', 'ordering',)
 
 
 @admin.register(Model)

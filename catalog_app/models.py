@@ -7,10 +7,17 @@ from catalog_app.commons import secret_from_string
 
 
 class Category(Directory):
+    ordering = models.IntegerField(
+        verbose_name="Параметр сортировки",
+        null=True,
+        blank=True,
+        default=0
+    )
 
     class Meta:
         verbose_name = "Раздел каталога (Код ОКДП2)"
         verbose_name_plural = "Разделы каталога (Классификатор кодов ОКДП2)"
+        ordering = ["ordering"]
 
 
 class Model(Directory):
