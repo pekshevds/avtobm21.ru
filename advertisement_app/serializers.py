@@ -37,3 +37,7 @@ class AdvertisementSerializer(serializers.Serializer):
                                            many=True, read_only=True)
     properties = ValuePropertyOfAnAdvertisementSerializer(
         required=False, allow_null=True, many=True, read_only=True)
+    specification = serializers.FileField(
+        use_url=True, allow_null=True, read_only=True)
+    business_offer = serializers.FileField(
+        use_url=True, allow_null=True, read_only=True)

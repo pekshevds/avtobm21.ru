@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import FileExtensionValidator
 from pytils.translit import slugify
 from server.base import Base
 from server.base import Directory
@@ -71,6 +72,22 @@ class Advertisement(Directory):
         verbose_name="Изображение (превью)",
         blank=True,
         null=True
+    )
+    specification = models.FileField(
+        verbose_name="Спецификация",
+        upload_to='docs/',
+        blank=True,
+        null=True,
+        default="",
+        validators=[FileExtensionValidator(allowed_extensions=['pdf'])]
+    )
+    business_offer = models.FileField(
+        verbose_name="Коммерческое предложение",
+        upload_to='docs/',
+        blank=True,
+        null=True,
+        default="",
+        validators=[FileExtensionValidator(allowed_extensions=['pdf'])]
     )
     is_active = models.BooleanField(
         verbose_name="Активен",
