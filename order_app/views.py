@@ -107,18 +107,22 @@ class OrderView(APIView):
     def get(self, request: HttpRequest) -> Response:
         client = request.user.client
         order = order_by_id(order_id=request.GET.get("id"))
+        total = 0
         if order:
             queryset = [order]
+            total = len(queryset)
         else:
             page_number = request.GET.get("page", default_number_of_page)
             count = request.GET.get("count", item_count_per_page)
 
             queryset = Order.objects.filter(client=client)
+            total = len(queryset)
             paginator = Paginator(queryset, count)
             queryset = paginator.get_page(page_number)
         serializer = OrderSerializer(queryset, many=True)
         response = {"data": serializer.data,
                     "count": len(queryset),
+                    "total": total,
                     "success": True}
         return Response(response)
 
