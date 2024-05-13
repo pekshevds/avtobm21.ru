@@ -41,6 +41,7 @@ class OrderStatusView(APIView):
         queryset = OrderStatus.objects.all()
         serializer = OrderStatusSerializer(queryset, many=True)
         response = {"data": serializer.data,
+                    "count": len(queryset),
                     "success": True}
         return Response(response)
 
@@ -54,6 +55,7 @@ class ContractView(APIView):
         queryset = Contract.objects.filter(client=client)
         serializer = ContractSerializer(queryset, many=True)
         response = {"data": serializer.data,
+                    "count": len(queryset),
                     "success": True}
         return Response(response)
 
@@ -69,11 +71,13 @@ class PutOrderStatusView(APIView):
         if order and status:
             success = put_order_status(order, status)
         response = {"data": [],
+                    "count": 0,
                     "success": success}
         return Response(response)
 
     def post(self, request: HttpRequest) -> Response:
         response = {"data": [],
+                    "count": 0,
                     "success": False}
         data = request.data.get("data")
         if not data:
@@ -91,6 +95,7 @@ class NewOrdersView(APIView):
         queryset = new_orders()
         serializer = OrderSerializer(queryset, many=True)
         response = {"data": serializer.data,
+                    "count": len(queryset),
                     "success": True}
         return Response(response)
 
@@ -157,6 +162,7 @@ class OrderItemView(APIView):
         order = get_object_or_404(Order, id=request.GET.get("id"))
         serializer = SimpleItemOrderSerializer(order.items, many=True)
         response = {"data": serializer.data,
+                    "count": len(serializer.data),
                     "success": True}
         return Response(response)
 
@@ -171,5 +177,6 @@ class OrderItemDeleteView(APIView):
         item.delete()
         serializer = ItemOrderSerializer(order.items, many=True)
         response = {"data": serializer.data,
+                    "count": len(serializer.data),
                     "success": True}
         return Response(response)

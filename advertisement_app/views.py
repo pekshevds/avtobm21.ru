@@ -19,5 +19,6 @@ class AdvertisementView(APIView):
         queryset = Advertisement.objects.filter(is_active=True)
         serializer = AdvertisementSerializer(queryset, many=True)
         response = {"data": serializer.data,
+                    "count": len(queryset),
                     "success": True}
         return Response(response)

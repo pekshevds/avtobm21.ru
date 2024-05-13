@@ -13,5 +13,6 @@ class ClientView(APIView):
         client = request.user.client
         serializer = ClientSerializer(client)
         response = {"data": serializer.data,
+                    "count": 1,
                     "success": True}
         return Response(response)

@@ -22,6 +22,7 @@ class CartView(APIView):
         queryset = fetch_users_cart(request.user)
         serializer = CartSerializer(queryset, many=True)
         response = {"data": serializer.data,
+                    "count": len(queryset),
                     "success": True}
         return Response(response)
 
@@ -37,6 +38,7 @@ class CartAddView(APIView):
         queryset = fetch_users_cart(request.user)
         serializer = CartSerializer(queryset, many=True)
         response = {"data": serializer.data,
+                    "count": len(queryset),
                     "success": True}
         return Response(response)
 
@@ -55,6 +57,7 @@ class CartAddView(APIView):
         queryset = fetch_users_cart(request.user)
         serializer = CartSerializer(queryset, many=True)
         response = {"data": serializer.data,
+                    "count": len(queryset),
                     "success": True}
         return Response(response)
 
@@ -70,6 +73,7 @@ class CartDeleteView(APIView):
         queryset = fetch_users_cart(request.user)
         serializer = CartSerializer(queryset, many=True)
         response = {"data": serializer.data,
+                    "count": len(queryset),
                     "success": True}
         return Response(response)
 
@@ -88,6 +92,7 @@ class CartDeleteView(APIView):
         queryset = fetch_users_cart(request.user)
         serializer = CartSerializer(queryset, many=True)
         response = {"data": serializer.data,
+                    "count": len(queryset),
                     "success": True}
         return Response(response)
 
@@ -102,5 +107,6 @@ class CartClearView(APIView):
         queryset = fetch_users_cart(request.user)
         serializer = CartSerializer(queryset, many=True)
         response = {"data": serializer.data,
+                    "count": len(queryset),
                     "success": True}
         return Response(response)

@@ -22,6 +22,7 @@ class WishListView(APIView):
         queryset = fetch_users_wish_list(request.user)
         serializer = WishListSerializer(queryset, many=True)
         response = {"data": serializer.data,
+                    "count": len(queryset),
                     "success": True}
         return Response(response)
 
@@ -37,6 +38,7 @@ class WishListAddView(APIView):
         queryset = fetch_users_wish_list(request.user)
         serializer = WishListSerializer(queryset, many=True)
         response = {"data": serializer.data,
+                    "count": len(queryset),
                     "success": True}
         return Response(response)
 
@@ -52,6 +54,7 @@ class WishListDeleteView(APIView):
         queryset = fetch_users_wish_list(request.user)
         serializer = WishListSerializer(queryset, many=True)
         response = {"data": serializer.data,
+                    "count": len(queryset),
                     "success": True}
         return Response(response)
 
@@ -66,5 +69,6 @@ class WishListClearView(APIView):
         queryset = fetch_users_wish_list(request.user)
         serializer = WishListSerializer(queryset, many=True)
         response = {"data": serializer.data,
+                    "count": len(queryset),
                     "success": True}
         return Response(response)
