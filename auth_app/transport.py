@@ -48,4 +48,7 @@ def send_message(subject: str, message: str, recipient: str):
 
 
 def send_pin_code(pin_code: str, recipient: str):
-    send_message("auth pin-code", pin_code, recipient)
+    send_message(
+        "Пин-код для входя в личный кабинет avtobm21.ru",
+        pin_code,
+        recipient)
