@@ -13,5 +13,6 @@ urlpatterns = [
     path('wish/', include('wish_list_app.urls', namespace='wish_list_app')),
     path('cart/', include('cart_app.urls', namespace='cart_app')),
     path('order/', include('order_app.urls', namespace='order_app')),
+    path('price/', include('price_app.urls', namespace='price_app')),
     path('api-token-auth/', views.obtain_auth_token),
 ]

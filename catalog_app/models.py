@@ -51,14 +51,14 @@ class Good(Directory):
         null=True,
         default=0
     )
-    price = models.DecimalField(
+    """price = models.DecimalField(
         verbose_name="Цена",
         max_digits=15,
         decimal_places=2,
         blank=True,
         null=True,
         default=0
-    )
+    )"""
     slug = models.SlugField(
         max_length=250,
         null=True,
@@ -92,9 +92,9 @@ class Good(Directory):
         null=True
     )
 
-    """@property
-    def images(self):
-        return GoodsImage.objects.filter(good=self)"""
+    @property
+    def price(self):
+        return 999
 
     def save(self, *args, **kwargs) -> None:
         if not self.slug:

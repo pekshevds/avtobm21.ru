@@ -43,7 +43,7 @@ class ManufacturerView(APIView):
             queryset = Manufacturer.objects.all()
             serializer = ManufacturerSerializer(queryset, many=True)
         response = {"data": serializer.data,
-                    "count": len(queryset),
+                    "count": len(serializer.data),
                     "success": True}
         return Response(response)
 
@@ -62,7 +62,7 @@ class ModelView(APIView):
             queryset = Model.objects.all()
             serializer = ModelSerializer(queryset, many=True)
         response = {"data": serializer.data,
-                    "count": len(queryset),
+                    "count": len(serializer.data),
                     "success": True}
         return Response(response)
 
@@ -81,7 +81,7 @@ class CategoryView(APIView):
             queryset = Category.objects.all()
             serializer = CategorySerializer(queryset, many=True)
         response = {"data": serializer.data,
-                    "count": len(queryset),
+                    "count": len(serializer.data),
                     "success": True}
         return Response(response)
 
@@ -131,7 +131,7 @@ class GoodView(APIView):
             )
         response = {
             "data": serializer.data,
-            "count": len(queryset),
+            "count": len(serializer.data),
             "success": True}
         return Response(response)
 

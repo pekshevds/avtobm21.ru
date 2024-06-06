@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'wish_list_app.apps.WishListAppConfig',
     'client_app.apps.ClientAppConfig',
     'advertisement_app.apps.AdvertisementAppConfig',
+    'price_app.apps.PriceAppConfig',
 ]
 
 MIDDLEWARE = [
