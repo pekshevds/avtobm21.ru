@@ -94,7 +94,12 @@ class Good(Directory):
 
     @property
     def price(self):
-        return 999
+        from index_app.models import Const
+        info = Const.info()
+        record = self.prices.filter(kind=info.kind_price).first()
+        if record:
+            return record.price
+        return 0
 
     def save(self, *args, **kwargs) -> None:
         if not self.slug:

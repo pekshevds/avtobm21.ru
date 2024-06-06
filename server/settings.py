@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'client_app.apps.ClientAppConfig',
     'advertisement_app.apps.AdvertisementAppConfig',
     'price_app.apps.PriceAppConfig',
+    'index_app.apps.IndexAppConfig',
 ]
 
 MIDDLEWARE = [
