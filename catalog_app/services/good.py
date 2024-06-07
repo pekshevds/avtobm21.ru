@@ -73,13 +73,21 @@ def handle_kind_price(kind_dir: dir) -> KindPrice:
     return obj
 
 
-def handle_prices(prices: List[dir], good: Good) -> Price:
+def handle_price(kind: KindPrice, good: Good, price: Decimal) -> Price:
+    obj, _ = Price.objects.get_or_create(kind=kind, good=good)
+    obj.price = price
+    obj.save()
+    return obj
+
+
+def handle_prices(prices: List[dir], good: Good) -> None:
     for record in prices:
         kind = handle_kind_price(record)
-        obj, _ = Price.objects.get_or_create(kind=kind, good=good)
-        obj.price = record.get("price", obj.price)
-        obj.save()
-        return obj
+        handle_price(
+            kind=kind,
+            good=good,
+            price=record.get("price", Decimal("0"))
+        )
 
 
 def handle_good(good_dir: dir) -> Good:
