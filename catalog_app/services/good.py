@@ -22,6 +22,10 @@ from catalog_app.services.manufacturer import handle_manufacturer
 from catalog_app.services.model import handle_model
 from django.conf import settings
 from price_app.services import current_price
+from price_app.models import (
+    KindPrice,
+    Price
+)
 
 
 logger = logging.getLogger(__name__)
@@ -62,17 +66,27 @@ def handle_image_list(image_list: List[dir], good: Good):
             handle_applicability(model, good)
 
 
+def handle_kind_price(kind_dir: dir) -> KindPrice:
+    obj, _ = KindPrice.objects.get_or_create(id=kind_dir.get("id"))
+    obj.name = kind_dir.get("name", obj.name)
+    obj.save()
+    return obj
+
+
+def handle_prices(prices: List[dir], good: Good) -> Price:
+    for record in prices:
+        kind = handle_kind_price(record)
+        obj, _ = Price.objects.get_or_create(kind=kind, good=good)
+        obj.price = record.get("price", obj.price)
+        obj.save()
+        return obj
+
+
 def handle_good(good_dir: dir) -> Good:
-    good_id = good_dir.get('id')
-    good = good_by_id(good_id)
-    if good is None:
-        if good_id:
-            good = Good.objects.create(id=good_id)
-        else:
-            good = Good.objects.create()
+    good, _ = Good.objects.get_or_create(id=good_dir.get('id'))
 
     good.name = good_dir.get('name', good.name)
-    good.price = good_dir.get('price', good.price)
+    # good.price = good_dir.get('price', good.price)
     good.balance = good_dir.get('balance', good.balance)
     good.art = good_dir.get('art', good.art)
     good.comment = good_dir.get('comment', good.comment)
@@ -89,7 +103,12 @@ def handle_good(good_dir: dir) -> Good:
         temp_dir = good_dir.get(key_name)
         good.manufacturer = None if temp_dir is None else \
             handle_manufacturer(temp_dir)
+
     good.save()
+
+    key_name = 'prices'
+    if key_name in good_dir:
+        handle_prices(good_dir.get(key_name), good)
     return good
 
 

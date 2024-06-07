@@ -10,7 +10,7 @@ def current_price(good: object, user: object) -> Decimal:
         record = good.prices.filter(kind=kind_price).first()
         if record:
             return record.price
-    kind_price = user.kind_price
+    kind_price = user.client.kind_price
     record = good.prices.filter(kind=kind_price).first()
     if record:
         return record.price

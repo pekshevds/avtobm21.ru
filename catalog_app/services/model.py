@@ -11,15 +11,10 @@ def model_by_id(id: str) -> Model:
 
 
 def handle_model(item_dir: dir) -> Model:
-    item_id = item_dir.get('id', "")
-    item = model_by_id(id=item_id)
-    if item is None:
-        item = Model.objects.create(
-            id=item_id
-        )
-    item.name = item_dir.get('name', item.name)
-    item.save()
-    return item
+    obj, _ = Model.objects.get_or_create(id=item_dir.get("id"))
+    obj.name = item_dir.get("name", obj.name)
+    obj.save()
+    return obj
 
 
 def handle_model_list(item_list: List[dir]) -> QuerySet[Model]:
