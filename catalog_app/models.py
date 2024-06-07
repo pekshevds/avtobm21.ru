@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.db import models
 from pytils.translit import slugify
 from server.base import Base
@@ -51,14 +52,6 @@ class Good(Directory):
         null=True,
         default=0
     )
-    """price = models.DecimalField(
-        verbose_name="Цена",
-        max_digits=15,
-        decimal_places=2,
-        blank=True,
-        null=True,
-        default=0
-    )"""
     slug = models.SlugField(
         max_length=250,
         null=True,
@@ -93,13 +86,8 @@ class Good(Directory):
     )
 
     @property
-    def price(self):
-        from index_app.models import Const
-        info = Const.info()
-        record = self.prices.filter(kind=info.kind_price).first()
-        if record:
-            return record.price
-        return 0
+    def price(self) -> Decimal:
+        return Decimal("0")
 
     def save(self, *args, **kwargs) -> None:
         if not self.slug:

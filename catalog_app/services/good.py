@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+from decimal import Decimal
 from typing import List
 import json
 from threading import Thread
@@ -19,6 +21,7 @@ from catalog_app.services.category import (
 from catalog_app.services.manufacturer import handle_manufacturer
 from catalog_app.services.model import handle_model
 from django.conf import settings
+from price_app.services import current_price
 
 
 logger = logging.getLogger(__name__)
@@ -163,3 +166,16 @@ def fetch_goods_queryset_by_filters(
 
     queryset = Good.objects.filter(filters)
     return queryset
+
+
+def prepare_goods_to_serializing(queryset, user):
+    @dataclass
+    class CoupleOfGoodAndPrice:
+        good: Good
+        price: Decimal
+    return [
+        CoupleOfGoodAndPrice(
+            good=record,
+            price=current_price(record, user)
+        ) for record in queryset
+    ]

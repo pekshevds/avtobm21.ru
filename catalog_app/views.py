@@ -16,13 +16,15 @@ from catalog_app.serializers import (
     ManufacturerSerializer,
     ModelSerializer,
     GoodSerializer,
-    CategorySerializer
+    CategorySerializer,
+    GoodPriceSerializer
 )
 from catalog_app.services.good import (
     # handle_good_list,
     save_good_list_into_file,
     load_good_list_from_file,
-    fetch_goods_queryset_by_name_or_article
+    fetch_goods_queryset_by_name_or_article,
+    prepare_goods_to_serializing
 )
 from catalog_app.services.category import category_by_id_list
 from catalog_app.services.manufacturer import manufacturer_by_id_list
@@ -95,7 +97,9 @@ class GoodView(APIView):
         id = request.GET.get("id", 0)
         if id:
             queryset = Good.objects.filter(id=id)
-            serializer = GoodSerializer(queryset, many=True)
+            # serializer = GoodSerializer(queryset, many=True)
+            data = prepare_goods_to_serializing(queryset, request.user)
+            serializer = GoodPriceSerializer(data, many=True)
         else:
             page_number = request.GET.get("page", 1)
             count = request.GET.get("count", 25)
@@ -126,9 +130,12 @@ class GoodView(APIView):
                 queryset = Good.objects.all()
 
             paginator = Paginator(queryset, count)
-            serializer = GoodSerializer(
+            """serializer = GoodSerializer(
                 paginator.get_page(page_number), many=True
-            )
+            )"""
+            data = prepare_goods_to_serializing(
+                paginator.get_page(page_number), request.user)
+            serializer = GoodPriceSerializer(data, many=True)
         response = {
             "data": serializer.data,
             "count": len(serializer.data),

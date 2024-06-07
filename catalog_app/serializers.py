@@ -33,7 +33,7 @@ class GoodSerializer(serializers.Serializer):
     balance = serializers.DecimalField(
         max_digits=15, decimal_places=3, required=False)
     price = serializers.DecimalField(
-        max_digits=15, decimal_places=2, required=False)
+        max_digits=15, decimal_places=2, read_only=True)
     category = CategorySerializer(required=False, allow_null=True)
     manufacturer = ManufacturerSerializer(required=False, allow_null=True)
     image = ImageSerializer(required=False, allow_null=True, read_only=True)
@@ -52,7 +52,7 @@ class SimpleGoodSerializer(serializers.Serializer):
     balance = serializers.DecimalField(
         max_digits=15, decimal_places=3, required=False)
     price = serializers.DecimalField(
-        max_digits=15, decimal_places=2, required=False)
+        max_digits=15, decimal_places=2, read_only=True)
     category_id = serializers.UUIDField(required=False, allow_null=True)
     manufacturer_id = serializers.UUIDField(required=False, allow_null=True)
     image = ImageSerializer(required=False, allow_null=True, read_only=True)
@@ -61,3 +61,9 @@ class SimpleGoodSerializer(serializers.Serializer):
     applicabilities = GoodsApplicabilitySerializer(
         required=False, allow_null=True,
         many=True, read_only=True)
+
+
+class GoodPriceSerializer(serializers.Serializer):
+    good = GoodSerializer()
+    price = serializers.DecimalField(
+        max_digits=15, decimal_places=2, read_only=True)
