@@ -102,7 +102,7 @@ class GoodView(APIView):
             serializer = GoodPriceSerializer(data, many=True)
         else:
             page_number = request.GET.get("page", 1)
-            count = request.GET.get("count", 25)
+            count = request.GET.get("count", 24)
             queryset = None
 
             search = request.GET.get("search")
