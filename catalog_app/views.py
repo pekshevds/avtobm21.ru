@@ -138,7 +138,7 @@ class GoodView(APIView):
             serializer = GoodPriceSerializer(data, many=True)
         response = {
             "data": serializer.data,
-            "count": len(serializer.data),
+            "count": Good.objects.all().count(),
             "success": True}
         return Response(response)
 
