@@ -21,7 +21,7 @@ from catalog_app.services.category import (
 from catalog_app.services.manufacturer import handle_manufacturer
 from catalog_app.services.model import handle_model
 from django.conf import settings
-from price_app.services import current_price
+from price_app.services import current_kind
 from price_app.models import (
     KindPrice,
     Price
@@ -200,9 +200,18 @@ def prepare_goods_to_serializing(queryset, user):
     class CoupleOfGoodAndPrice:
         good: Good
         price: Decimal
-    return [
-        CoupleOfGoodAndPrice(
+    items = list()
+    prices = Price.objects.filter(good__in=[good for good in queryset])
+    kind_price = current_kind(user=user)
+    for record in queryset:
+        price = Decimal("0")
+        if kind_price:
+            price_record = prices.filter(good=record, kind=kind_price).first()
+            if price_record:
+                price = price_record.price
+        item = CoupleOfGoodAndPrice(
             good=record,
-            price=current_price(record, user)
-        ) for record in queryset
-    ]
+            price=price
+        )
+        items.append(item)
+    return items
