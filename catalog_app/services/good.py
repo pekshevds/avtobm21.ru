@@ -201,14 +201,15 @@ def prepare_goods_to_serializing(queryset, user):
         good: Good
         price: Decimal
     items = list()
-    prices = Price.objects.filter(good__in=[good for good in queryset])
-    kind_price = current_kind(user=user)
+    prices = Price.objects.filter(
+        good__in=[good for good in queryset],
+        kind=current_kind(user=user)
+    )
     for record in queryset:
         price = Decimal("0")
-        if kind_price:
-            price_record = prices.filter(good=record, kind=kind_price).first()
-            if price_record:
-                price = price_record.price
+        price_record = prices.filter(good=record).first()
+        if price_record:
+            price = price_record.price
         item = CoupleOfGoodAndPrice(
             good=record,
             price=price
