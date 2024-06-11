@@ -197,7 +197,7 @@ def fetch_goods_queryset_by_filters(
 
 def prepare_goods_to_serializing(queryset, user):
     @dataclass
-    class CoupleOfGoodAndPrice:
+    class Data:
         good: Good
         price: Decimal
     items = list()
@@ -205,13 +205,13 @@ def prepare_goods_to_serializing(queryset, user):
         good__in=[good for good in queryset],
         kind=current_kind(user=user)
     )
-    for record in queryset:
+    for item in queryset:
         price = Decimal("0")
-        price_record = prices.filter(good=record).first()
+        price_record = prices.filter(good=item).first()
         if price_record:
             price = price_record.price
-        item = CoupleOfGoodAndPrice(
-            good=record,
+        item = Data(
+            good=item,
             price=price
         )
         items.append(item)
