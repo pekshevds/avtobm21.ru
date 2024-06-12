@@ -18,15 +18,13 @@ class Price(models.Model):
         KindPrice,
         verbose_name="Вид цены",
         on_delete=models.CASCADE,
-        related_name="prices",
-        db_index=True
+        related_name="prices"
     )
     good = models.ForeignKey(
         Good,
         verbose_name="Товар",
         on_delete=models.CASCADE,
-        related_name="prices",
-        db_index=True
+        related_name="prices"
     )
     price = models.DecimalField(
         verbose_name="Цена",
