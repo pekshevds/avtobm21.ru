@@ -11,10 +11,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        #migrations.RemoveIndex(
-        #    model_name='price',
-        #    name='price_app_p_kind_id_4f6bff_idx',
-        #),
+        migrations.RemoveIndex(
+            model_name='price',
+            name='price_app_p_kind_id_4f6bff_idx',
+        ),
         migrations.AlterIndexTogether(
             name='price',
             index_together={('kind', 'good')},
