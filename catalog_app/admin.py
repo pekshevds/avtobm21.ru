@@ -49,10 +49,10 @@ class ApplicabilityInLine(admin.TabularInline):
 class GoodAdmin(admin.ModelAdmin):
     inlines = [GoodsImageInLine, ApplicabilityInLine]
     list_display = (
-        'name', 'art', 'category',
+        'name', 'art', 'clean_art', 'category',
         'is_active', 'balance', 'price', 'preview',
     )
-    search_fields = ('name', 'art',)
+    search_fields = ('name', 'art', 'clean_art',)
 
     def preview(self, obj):
         if obj.image:

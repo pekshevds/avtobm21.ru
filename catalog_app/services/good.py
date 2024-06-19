@@ -26,6 +26,7 @@ from price_app.models import (
     KindPrice,
     Price
 )
+from catalog_app.commons import clean_string
 
 
 logger = logging.getLogger(__name__)
@@ -159,8 +160,10 @@ def handle_good_list(good_list: None) -> QuerySet[Good]:
 
 
 def fetch_goods_queryset_by_name_or_article(search: str) -> QuerySet[Good]:
+    clean_art = clean_string(search)
     queryset = Good.objects.filter(
         Q(name__icontains=search) |
+        Q(clean_art__icontains=clean_art) |
         Q(art__icontains=search)
         )
     return queryset

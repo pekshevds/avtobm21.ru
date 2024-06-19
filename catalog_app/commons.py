@@ -1,4 +1,10 @@
 import hashlib
+from string import punctuation, whitespace
+
+
+def clean_string(dirty_string: str) -> str:
+    bad_chars = punctuation + whitespace
+    return "".join([_ for _ in dirty_string if _ not in bad_chars])
 
 
 def secret_from_string(string: str) -> str:

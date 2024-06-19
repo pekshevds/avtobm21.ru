@@ -4,7 +4,10 @@ from pytils.translit import slugify
 from server.base import Base
 from server.base import Directory
 from image_app.models import Image
-from catalog_app.commons import secret_from_string
+from catalog_app.commons import (
+    secret_from_string,
+    clean_string
+)
 
 
 class Category(Directory):
@@ -38,6 +41,14 @@ class Manufacturer(Directory):
 class Good(Directory):
     art = models.CharField(
         verbose_name="Артикул",
+        max_length=50,
+        blank=True,
+        null=True,
+        default="",
+        db_index=True
+    )
+    clean_art = models.CharField(
+        verbose_name="Артикул для поиска",
         max_length=50,
         blank=True,
         null=True,
@@ -94,6 +105,7 @@ class Good(Directory):
             self.slug = slugify(
                 f"{self.name}-{secret_from_string(str(self.id))}"
             )
+        self.clean_art = clean_string(self.art)
         return super().save(*args, **kwargs)
 
     class Meta:
