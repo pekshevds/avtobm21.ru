@@ -1,30 +1,22 @@
 from django.http import HttpRequest
 from django.core.paginator import Paginator
-from rest_framework import (
-    permissions,
-    authentication
-)
+from rest_framework import permissions, authentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from catalog_app.models import (
-    Manufacturer,
-    Model,
-    Category,
-    Good
-)
+from catalog_app.models import Manufacturer, Model, Category, Good
 from catalog_app.serializers import (
     ManufacturerSerializer,
     ModelSerializer,
     GoodSerializer,
     CategorySerializer,
-    GoodPriceSerializer
+    GoodPriceSerializer,
 )
 from catalog_app.services.good import (
     # handle_good_list,
     save_good_list_into_file,
     load_good_list_from_file,
     fetch_goods_queryset_by_name_or_article,
-    prepare_goods_to_serializing
+    prepare_goods_to_serializing,
 )
 from catalog_app.services.category import category_by_id_list
 from catalog_app.services.manufacturer import manufacturer_by_id_list
@@ -32,7 +24,6 @@ from catalog_app.services.good import fetch_goods_queryset_by_filters
 
 
 class ManufacturerView(APIView):
-
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
@@ -44,14 +35,11 @@ class ManufacturerView(APIView):
         else:
             queryset = Manufacturer.objects.all()
             serializer = ManufacturerSerializer(queryset, many=True)
-        response = {"data": serializer.data,
-                    "count": queryset.count(),
-                    "success": True}
+        response = {"data": serializer.data, "count": queryset.count(), "success": True}
         return Response(response)
 
 
 class ModelView(APIView):
-
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
@@ -63,14 +51,11 @@ class ModelView(APIView):
         else:
             queryset = Model.objects.all()
             serializer = ModelSerializer(queryset, many=True)
-        response = {"data": serializer.data,
-                    "count": queryset.count(),
-                    "success": True}
+        response = {"data": serializer.data, "count": queryset.count(), "success": True}
         return Response(response)
 
 
 class CategoryView(APIView):
-
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
@@ -82,14 +67,11 @@ class CategoryView(APIView):
         else:
             queryset = Category.objects.all()
             serializer = CategorySerializer(queryset, many=True)
-        response = {"data": serializer.data,
-                    "count": queryset.count(),
-                    "success": True}
+        response = {"data": serializer.data, "count": queryset.count(), "success": True}
         return Response(response)
 
 
 class GoodView(APIView):
-
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
@@ -109,7 +91,6 @@ class GoodView(APIView):
             if search:
                 queryset = fetch_goods_queryset_by_name_or_article(search)
             else:
-
                 categories = None
                 category_id = request.GET.get("category_id")
                 if category_id:
@@ -118,13 +99,8 @@ class GoodView(APIView):
                 manufacturers = None
                 manufacturer_id = request.GET.get("manufacturer_id")
                 if manufacturer_id:
-                    manufacturers = manufacturer_by_id_list(
-                        manufacturer_id.split(",")
-                    )
-                queryset = fetch_goods_queryset_by_filters(
-                    categories,
-                    manufacturers
-                )
+                    manufacturers = manufacturer_by_id_list(manufacturer_id.split(","))
+                queryset = fetch_goods_queryset_by_filters(categories, manufacturers)
 
             if queryset is None:
                 queryset = Good.objects.all()
@@ -134,18 +110,14 @@ class GoodView(APIView):
                 paginator.get_page(page_number), many=True
             )"""
             data = prepare_goods_to_serializing(
-                paginator.get_page(page_number), request.user)
+                paginator.get_page(page_number), request.user
+            )
             serializer = GoodPriceSerializer(data, many=True)
-        response = {
-            "data": serializer.data,
-            "count": queryset.count(),
-            "success": True}
+        response = {"data": serializer.data, "count": queryset.count(), "success": True}
         return Response(response)
 
     def post(self, request: HttpRequest) -> Response:
-        response = {"data": [],
-                    "count": 0,
-                    "success": False}
+        response = {"data": [], "count": 0, "success": False}
         data = request.data.get("data", None)
         if not data:
             return Response(response)
