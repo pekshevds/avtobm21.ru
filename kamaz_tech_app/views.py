@@ -5,8 +5,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from kamaz_tech_app.serializers import (
     LoadServicesIncomingSerializer,
-    AuthSerializer,
-    OrderServiceStatusSerializer,
+    AuthIncomingSerializer,
+    OrderServiceStatusIncomingSerializer,
 )
 from kamaz_tech_app.utils import (
     get_auth_token,
@@ -39,20 +39,19 @@ class OrderServicesView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request: HttpRequest) -> Response:
-        serialiser = AuthSerializer(data=request.data)
+        serialiser = AuthIncomingSerializer(data=request.data)
         if not serialiser.is_valid():
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
         validated_data = serialiser.validated_data
-        token = get_auth_token(
-            validated_data.get("username"), validated_data.get("password")
-        )
+        auth = validated_data.get("auth")
+        token = get_auth_token(auth.get("username"), auth.get("password"))
         if token:
             return Response(download_orders(token))
         response: dict[str, Any] = {}
         return Response(response)
 
     def post(self, request: HttpRequest) -> Response:
-        serialiser = OrderServiceStatusSerializer(data=request.data)
+        serialiser = OrderServiceStatusIncomingSerializer(data=request.data)
         if not serialiser.is_valid():
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
         validated_data = serialiser.validated_data

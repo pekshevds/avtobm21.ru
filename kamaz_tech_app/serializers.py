@@ -35,6 +35,10 @@ class StatusSerializer(serializers.Serializer):
     dealer_comment = serializers.CharField(max_length=1024, required=True)
 
 
-class OrderServiceStatusSerializer(serializers.Serializer):
+class OrderServiceStatusIncomingSerializer(serializers.Serializer):
     auth = AuthSerializer()
     data = StatusSerializer()
+
+
+class AuthIncomingSerializer(serializers.Serializer):
+    auth = AuthSerializer()
