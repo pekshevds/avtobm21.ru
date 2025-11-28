@@ -18,6 +18,23 @@ class DataSerializer(serializers.Serializer):
     workers = ItemSerializer(allow_null=True, many=True)
 
 
-class BodySerializer(serializers.Serializer):
+class LoadServicesIncomingSerializer(serializers.Serializer):
     auth = AuthSerializer()
     data = DataSerializer()
+
+
+class StatusSerializer(serializers.Serializer):
+    order_id = serializers.CharField(max_length=36)
+    order_status = serializers.CharField(max_length=36)
+    order_comment = serializers.CharField(
+        max_length=1024, required=False, allow_blank=True
+    )
+    handling_reason = serializers.CharField(
+        max_length=1024, required=False, allow_blank=True
+    )
+    dealer_comment = serializers.CharField(max_length=1024, required=True)
+
+
+class OrderServiceStatusSerializer(serializers.Serializer):
+    auth = AuthSerializer()
+    data = StatusSerializer()

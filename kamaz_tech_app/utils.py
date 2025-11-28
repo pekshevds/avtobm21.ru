@@ -21,7 +21,7 @@ def get_auth_token(username: str, password: str) -> str | None:
     return None
 
 
-def load_services(token: str, json: dict[str, Any]) -> bool:
+def upload_services(token: str, json: dict[str, Any]) -> dict[str, Any]:
     headers = {
         "accept": "application/json",
         "Content-Type": "application/json",
@@ -31,6 +31,36 @@ def load_services(token: str, json: dict[str, Any]) -> bool:
         "https://services.sc.kamaz.tech/v1/services/load", headers=headers, json=json
     )
     if result.status_code == 200:
-        data = result.json()
-        return data.get("ok", False)
-    return False
+        return result.json()
+    return {}
+
+
+def download_orders(token: str) -> dict[str, Any]:
+    headers = {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {token}",
+    }
+    params = {"new_order": False}
+    result = httpx.get(
+        "https://services.sc.kamaz.tech/v1/services/orders",
+        headers=headers,
+        params=params,
+    )
+    if result.status_code == 200:
+        return result.json()
+    return {}
+
+
+def update_orders_status(token: str, json: dict[str, Any]) -> dict[str, Any]:
+    headers = {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {token}",
+    }
+    result = httpx.post(
+        "https://services.sc.kamaz.tech/v1/services/orders", headers=headers, json=json
+    )
+    if result.status_code == 200:
+        return result.json()
+    return {}
